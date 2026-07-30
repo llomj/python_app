@@ -4398,11 +4398,11 @@ const hexToRgba = (hex: string, alpha: number) => {
     return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
 };
 
-const loadColorSettings = <T extends Record<string, string>>(storageKey: string, defaults: T): T => {
+const loadColorSettings = <T extends object>(storageKey: string, defaults: T): T => {
     try {
         const parsed = JSON.parse(localStorage.getItem(storageKey) || '{}');
         return Object.fromEntries(
-            Object.entries(defaults).map(([key, value]) => [key, sanitizeHexColor(parsed?.[key], value)])
+            Object.entries(defaults as Record<string, string>).map(([key, value]) => [key, sanitizeHexColor(parsed?.[key], value)])
         ) as T;
     } catch {
         return defaults;
@@ -4514,7 +4514,7 @@ const PYTHON_CONCEPT_MODES: ConceptMode[] = [
     { id: 'concept:earlyExit', label: 'Early Exit', description: 'break, continue, and early return', patterns: [/\bearly exit\b/], categoryPrefixes: ['Early Exit '] },
     { id: 'concept:multipleReturns', label: 'Multiple Return Values', description: 'Returning and unpacking related results', patterns: [/\bmultiple return value\b/], categoryPrefixes: ['Multiple Return Value '] },
     { id: 'concept:dataCleaning', label: 'Data Cleaning', description: 'Normalize, trim, validate, and deduplicate data', patterns: [/\bdata cleaning\b/], categoryPrefixes: ['Data Cleaning '] },
-].sort((a, b) => a.label.localeCompare(b.label));
+].sort((a, b) => a.label.localeCompare(b.label)) as ConceptMode[];
 
 interface ConceptDocGuide {
     shape?: string;
@@ -14935,7 +14935,7 @@ const buildExerciseGuideSections = (exercise: Exercise): GuideSection[] => {
         /print/i.test(promptLine) ? 'The output should be printed in the same format as the example.' : '',
     ].filter(Boolean);
 
-    return [
+    const sections: GuideSection[] = [
         {
             title: 'What The Problem Wants',
             tone: 'goal',
@@ -14956,7 +14956,8 @@ const buildExerciseGuideSections = (exercise: Exercise): GuideSection[] => {
             tone: 'hints',
             lines: [customHint, ...specificHints, ...conceptHints].filter(Boolean).slice(0, 6),
         },
-    ].filter(section => section.lines.length > 0);
+    ];
+    return sections.filter(section => section.lines.length > 0);
 };
 
 const getGuideSectionStyle = (tone: GuideSection['tone']) => {
@@ -15424,7 +15425,7 @@ const WorkspaceApp: React.FC = () => {
     const [isInFrame, setIsInFrame] = useState(false);
     const [showModal, setShowModal] = useState<'none' | 'instructions' | 'hint' | 'solution' | 'settings' | 'api_key' | 'restart_confirm' | 'delete_confirm' | 'problem_full' | 'customize' | 'stats_by_mode' | 'problem_ai' | 'general_ai' | 'problem_mode_help' | 'concept_mode_help'>('none');
     const countRowLongPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const [modalTab, setModalTab] = useState<'how' | 'cheat' | 'glossary' | 'regex'>('how');
+    const [modalTab, setModalTab] = useState<'how' | 'cheat' | 'glossary' | 'regex' | 'builtin'>('how');
     const [solutionTab, setSolutionTab] = useState<'code' | 'logic' | 'requirements' | 'syntax' | 'concept'>('code');
     const [customizeTab, setCustomizeTab] = useState<CustomizeModalTab>('count');
     const [modeSectionOpen, setModeSectionOpen] = useState(false);
@@ -16483,13 +16484,13 @@ const WorkspaceApp: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v302') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v303') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v302')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v303')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -18972,7 +18973,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     break;
                 case 'code_review':
                     refAnswer = answerPythonCodeReview(effectiveQuestion, appLang)
-                        || knowledge.answerPythonCodeQuality(effectiveQuestion, appLang);
+                        || answerPythonCodeQuality(effectiveQuestion, appLang);
                     break;
                 case 'purpose':
                     refAnswer = knowledge.answerPythonPurposeQuestion(effectiveQuestion, appLang);
@@ -19086,7 +19087,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 case 'refactoring':
                     refAnswer = answerPythonCodeRewriteRequest(effectiveQuestion, appLang)
                         || answerPythonRefactoringRecipes(effectiveQuestion, appLang)
-                        || knowledge.answerPythonCodeQuality(effectiveQuestion, appLang);
+                        || answerPythonCodeQuality(effectiveQuestion, appLang);
                     break;
                 case 'best_practices':
                     refAnswer = knowledge.answerPythonPurposeQuestion(effectiveQuestion, appLang)
@@ -19104,7 +19105,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                         || buildGeneralAiCoreTopicAnswer(effectiveQuestion);
                     break;
                 case 'performance':
-                    refAnswer = knowledge.answerPythonComplexityRequest(effectiveQuestion, appLang)
+                    refAnswer = answerPythonComplexityRequest(effectiveQuestion, appLang)
                         || knowledge.answerPythonKnowledgeQuestion(effectiveQuestion, appLang);
                     break;
                 case 'debugging':

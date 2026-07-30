@@ -134,7 +134,7 @@ if (rootElement) {
       if ('requestIdleCallback' in window) {
         (window as any).requestIdleCallback(preload, { timeout: 2500 });
       } else {
-        window.setTimeout(preload, 1500);
+        globalThis.setTimeout(preload, 1500);
       }
     })
     .catch(error => {
@@ -146,6 +146,6 @@ if (rootElement) {
     });
 }
 
-function StartupFailure({ error }: { error: Error }) {
+function StartupFailure({ error }: { error: Error }): never {
   throw error;
 }

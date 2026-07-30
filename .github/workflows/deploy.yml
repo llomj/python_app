@@ -30,6 +30,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Audit dependencies
+        run: npm audit --audit-level=high
+
+      - name: Validate graders
+        run: npm run check:graders
+
       - name: Audit Python concept definitions
         run: npm run audit:concepts && npm run audit:solution-variations && npm run audit:solution-semantics -- --max-under3=0 && npm run eval:general-ai && npm run eval:general-ai-final && npm run eval:problem-ai
 

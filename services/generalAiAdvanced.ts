@@ -1162,7 +1162,7 @@ export const answerPythonDoctestExecutionRequest = (question: string, language: 
 const pythonicFixups: Array<{ pattern: RegExp; fix: string; reasonEn: string; reasonFr: string }> = [
   { pattern: /\bfor\s+\w+\s+in\s+range\s*\(\s*len\s*\(/, fix: 'Use `enumerate()` or direct iteration', reasonEn: '`range(len(...))` is indirect and slower — iterate the collection directly', reasonFr: '`range(len(...))` est indirect et plus lent — itérez la collection directement' },
   { pattern: /\bnot\s+\w+\s+is\b/, fix: 'Use `x is not y` instead of `not x is y`', reasonEn: 'PEP 8 recommends `x is not y` as more readable', reasonFr: 'PEP 8 recommande `x is not y` pour une meilleure lisibilité' },
-  { pattern: /^\s*(?:result|output)\s*=\s*""\s*\n[\s\S]*?for\s+\w+\s+in\b[\s\S]*?\1\s*\+=\s*\w+/m, fix: 'Use a list and `"".join()`', reasonEn: 'String concatenation in a loop is O(n²) — `"".join(list)` is O(n)', reasonFr: 'La concaténation de chaînes dans une boucle est O(n²) — `"".join(liste)` est O(n)' },
+  { pattern: /^\s*(result|output)\s*=\s*""\s*\n[\s\S]*?for\s+\w+\s+in\b[\s\S]*?\1\s*\+=\s*\w+/m, fix: 'Use a list and `"".join()`', reasonEn: 'String concatenation in a loop is O(n²) — `"".join(list)` is O(n)', reasonFr: 'La concaténation de chaînes dans une boucle est O(n²) — `"".join(liste)` est O(n)' },
   { pattern: /if\s+\w+\s*==\s*True\b/, fix: 'Use `if x:` instead of `if x == True:`', reasonEn: '`== True` is redundant — `if x:` checks truthiness directly', reasonFr: '`== True` est redondant — `if x:` vérifie directement la vérité' },
   { pattern: /if\s+\w+\s*==\s*False\b/, fix: 'Use `if not x:` instead of `if x == False:`', reasonEn: '`== False` is redundant — `if not x:` is the idiomatic form', reasonFr: '`== False` est redondant — `if not x:` est la forme idiomatique' },
   { pattern: /except\s*:.*\n\s*pass/, fix: 'Catch a specific exception or at least log the error', reasonEn: 'A bare `except: pass` silently swallows every error including KeyboardInterrupt', reasonFr: 'Un `except: pass` nu avale silencieusement toutes les erreurs, y compris KeyboardInterrupt' },
@@ -1475,7 +1475,6 @@ export const answerPythonCodeReview = (question: string, language: AdvancedAiLan
     if (/^\s+$/.test(line)) { issues.push({ category: fr ? 'Style' : 'Style', severity: 'minor', message: fr ? 'Ligne vide avec espaces superflus' : 'Blank line with trailing whitespace', line: n }); score -= 1; }
     if (/^\s*except\s*:/.test(line)) { issues.push({ category: fr ? 'Erreurs' : 'Errors', severity: 'critical', message: fr ? '`except:` nu attrape BaseException (inclut KeyboardInterrupt)' : 'Bare `except:` catches BaseException (includes KeyboardInterrupt)', line: n }); score -= 10; }
     if (/^\s*except\s*:\s*\n\s*pass/.test(code)) { issues.push({ category: fr ? 'Erreurs' : 'Errors', severity: 'critical', message: fr ? '`except: pass` avale silencieusement toutes les erreurs' : '`except: pass` silently swallows all errors', line: n }); score -= 5; }
-    if (/\btry\s*:[\s\S]*?\bexcept\b(?!\s*(Exception|ValueError|TypeError|KeyError|OSError|IndexError|AttributeError|RuntimeError|IOError|StopIteration|ZeroDivisionError|FileNotFoundError|PermissionError|TimeoutError))/ && /^\s*except\s*:/.test(line)) { /* already caught above */ }
     if (/==\s*True\b|==\s*False\b/.test(line) && !/['"]/.test(line)) { issues.push({ category: fr ? 'Style' : 'Style', severity: 'minor', message: fr ? '`== True`/`== False` redondant — utilisez `if x:`/`if not x:`' : '`== True`/`== False` is redundant — use `if x:`/`if not x:`', line: n }); score -= 2; }
     if (/^\s*for\s+\w+\s+in\s+range\s*\(\s*len\s*\(/.test(line)) { issues.push({ category: fr ? 'Performance' : 'Performance', severity: 'major', message: fr ? '`range(len(...))` est indirect — utilisez `enumerate()` ou l\'itération directe' : '`range(len(...))` is indirect — use `enumerate()` or direct iteration', line: n }); score -= 5; }
     if (/^\s*(?:list|dict|str|int|float|bool|set|type|input|print|len|range)\s*=/.test(line.trim())) { issues.push({ category: fr ? 'Erreurs' : 'Errors', severity: 'critical', message: fr ? 'Masquage d\'un nom natif' : 'Shadowing a built-in', line: n }); score -= 8; }
@@ -1600,7 +1599,7 @@ export const answerPythonAsyncPatterns = (question: string, language: AdvancedAi
     '',
     "asyncio.run(main())",
     '```',
-  ].join('\n');
+  ];
 
   patterns.push(
     '',

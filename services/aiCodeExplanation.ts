@@ -268,7 +268,7 @@ const unknownValue = (type = 'value', operation = 'Python evaluates the expressi
 });
 
 const knownValue = (value: unknown, operation: string): TracedValue => {
-    let type = typeof value;
+    let type: string = typeof value;
     if (value === null) type = 'NoneType';
     else if (Array.isArray(value)) type = 'list';
     else if (value instanceof Set) type = 'set';

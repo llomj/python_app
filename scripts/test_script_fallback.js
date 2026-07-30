@@ -48,6 +48,7 @@ function loadTsExports(fileName) {
       if (request === '@codemirror/view') {
         return {
           EditorView: {
+            contentAttributes: { of: () => ({}) },
             domEventHandlers: () => ({}),
             theme: () => ({}),
             lineWrapping: {},
