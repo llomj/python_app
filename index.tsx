@@ -27,11 +27,7 @@ const startLocalPython = () => {
   return window.__PYODIDE_BOOT_PROMISE__;
 };
 
-// Python and the large editor/curriculum bundle load concurrently on mobile.
-startLocalPython().catch(() => undefined);
-import('./curriculumLoader')
-  .then(({ preloadCurriculum }) => preloadCurriculum())
-  .catch(() => undefined);
+window.__START_LOCAL_PYTHON__ = startLocalPython;
 
 class AppErrorBoundary extends React.Component<{ children: React.ReactNode }, { error: Error | null }> {
   constructor(props: { children: React.ReactNode }) {
@@ -130,6 +126,16 @@ if (rootElement) {
           <App />
         </AppErrorBoundary>
       );
+
+      // Let the launch screen paint before optional curriculum chunks are read.
+      const preload = () => import('./curriculumLoader')
+        .then(({ preloadCurriculum }) => preloadCurriculum())
+        .catch(() => undefined);
+      if ('requestIdleCallback' in window) {
+        (window as any).requestIdleCallback(preload, { timeout: 2500 });
+      } else {
+        window.setTimeout(preload, 1500);
+      }
     })
     .catch(error => {
       root.render(

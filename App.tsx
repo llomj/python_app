@@ -74,6 +74,7 @@ declare global {
         __PYODIDE_INSTANCE__: any;
         __PYODIDE_INIT_LOCK__: boolean;
         __PYODIDE_BOOT_PROMISE__?: Promise<any>;
+        __START_LOCAL_PYTHON__?: () => Promise<any>;
         loadPyodide: any;
         APP_VERSION?: string;
     }
@@ -4274,6 +4275,8 @@ const getOfflineAiElapsedLabel = (startedAt?: number, now = Date.now()) => {
 };
 
 const AI_REVIEW_UI_TIMEOUT_MS = 55000;
+const USER_CODE_TIMEOUT_SECONDS = 2;
+const USER_CODE_TIMEOUT_CHECK_INTERVAL = 20;
 
 const withAiReviewTimeout = async <T,>(promise: Promise<T>): Promise<T> => {
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
@@ -5341,21 +5344,37 @@ const getExerciseById = (id: number | null): Exercise | null => {
     return EXERCISES.find(item => item.id === id) ?? null;
 };
 
+const EXERCISE_POOL_CACHE = new Map<ProblemMode, Exercise[]>();
+
 const getExercisePoolForMode = (mode: ProblemMode): Exercise[] => {
-    if (mode === 'normal') return EXERCISES;
-    if (mode === 'atomic_beginner') return EXERCISES.filter(item => classifyExerciseDifficulty(item) === 'atomic_beginner');
-    const concept = getConceptForMode(mode);
-    if (concept) {
-        return EXERCISES.filter(item => exerciseMatchesConcept(item, concept));
+    const cached = EXERCISE_POOL_CACHE.get(mode);
+    if (cached) return cached;
+
+    let pool: Exercise[];
+    if (mode === 'normal') pool = EXERCISES;
+    else if (mode === 'atomic_beginner') pool = EXERCISES.filter(item => classifyExerciseDifficulty(item) === 'atomic_beginner');
+    else {
+        const concept = getConceptForMode(mode);
+        if (concept) {
+            pool = EXERCISES.filter(item => exerciseMatchesConcept(item, concept));
+        } else {
+            const difficultyPool = EXERCISES.filter(item => classifyExerciseDifficulty(item) === mode);
+            pool = difficultyPool.length > 0 ? difficultyPool : EXERCISES;
+        }
     }
-    const pool = EXERCISES.filter(item => classifyExerciseDifficulty(item) === mode);
-    return pool.length > 0 ? pool : EXERCISES;
+
+    EXERCISE_POOL_CACHE.set(mode, pool);
+    return pool;
 };
 
 const getRandomExerciseForMode = (mode: ProblemMode, excludeId?: number): Exercise => {
     const pool = getExercisePoolForMode(mode);
-    const candidates = pool.length > 1 && excludeId ? pool.filter(item => item.id !== excludeId) : pool;
-    return candidates[Math.floor(Math.random() * candidates.length)] ?? EXERCISES[0];
+    if (pool.length === 0) return EXERCISES[0];
+    let index = Math.floor(Math.random() * pool.length);
+    if (pool.length > 1 && excludeId && pool[index].id === excludeId) {
+        index = (index + 1) % pool.length;
+    }
+    return pool[index];
 };
 
 const getInitialExercise = (): Exercise => {
@@ -15764,6 +15783,8 @@ const WorkspaceApp: React.FC = () => {
     const keyboardRestoreTimerRef = useRef<number | null>(null);
     const layoutSyncFrameRef = useRef<number | null>(null);
     const layoutSyncDeadlineRef = useRef(0);
+    const runGenerationRef = useRef(0);
+    const pythonRuntimeGenerationRef = useRef<number | null>(null);
     const deleteHoldDelayRef = useRef<number | null>(null);
     const deleteHoldTimerRef = useRef<number | null>(null);
     const outputRef = useRef<HTMLDivElement>(null);
@@ -15819,27 +15840,21 @@ const WorkspaceApp: React.FC = () => {
     const modeExerciseCount = useMemo(() => {
         return getExercisePoolForMode(difficultyMode).length;
     }, [difficultyMode]);
-    const statsRows = useMemo(() => MODE_OPTIONS.map(mode => {
+    const statsPanelsVisible = showModal === 'stats_by_mode' || (showModal === 'settings' && statsByModeSectionOpen);
+    const difficultyStatsRows = useMemo(() => statsPanelsVisible ? DIFFICULTY_MODES.map(mode => {
         const modeStats = statsByMode[mode.id] ?? EMPTY_STATS;
         const modeRate = modeStats.shots > 0 ? ((modeStats.success / modeStats.shots) * 100).toFixed(0) : '0';
         const modeRank = getModeRank(modeStats);
         const problemCount = getExercisePoolForMode(mode.id).length;
         return { ...mode, stats: modeStats, rate: modeRate, rank: modeRank, problemCount };
-    }), [statsByMode]);
-    const difficultyStatsRows = useMemo(() => DIFFICULTY_MODES.map(mode => {
+    }) : [], [statsByMode, statsPanelsVisible]);
+    const conceptStatsRows = useMemo(() => statsPanelsVisible ? PYTHON_CONCEPT_MODES.map(mode => {
         const modeStats = statsByMode[mode.id] ?? EMPTY_STATS;
         const modeRate = modeStats.shots > 0 ? ((modeStats.success / modeStats.shots) * 100).toFixed(0) : '0';
         const modeRank = getModeRank(modeStats);
         const problemCount = getExercisePoolForMode(mode.id).length;
         return { ...mode, stats: modeStats, rate: modeRate, rank: modeRank, problemCount };
-    }), [statsByMode]);
-    const conceptStatsRows = useMemo(() => PYTHON_CONCEPT_MODES.map(mode => {
-        const modeStats = statsByMode[mode.id] ?? EMPTY_STATS;
-        const modeRate = modeStats.shots > 0 ? ((modeStats.success / modeStats.shots) * 100).toFixed(0) : '0';
-        const modeRank = getModeRank(modeStats);
-        const problemCount = getExercisePoolForMode(mode.id).length;
-        return { ...mode, stats: modeStats, rate: modeRate, rank: modeRank, problemCount };
-    }), [statsByMode]);
+    }) : [], [statsByMode, statsPanelsVisible]);
     const selectedConceptMode = getConceptForMode(difficultyMode);
     const conceptDocContent = useMemo(() => {
         if (!isConceptMode(difficultyMode)) return '';
@@ -15883,20 +15898,6 @@ const WorkspaceApp: React.FC = () => {
         const intervalId = window.setInterval(() => setOfflineAiNow(Date.now()), 1000);
         return () => window.clearInterval(intervalId);
     }, [offlineAiState.status]);
-
-    // Auto-download offline AI model on first launch
-    useEffect(() => {
-        if (offlineAiState.status === 'idle' || offlineAiState.status === 'failed') {
-            const opId = ++offlineAiOperationRef.current;
-            downloadOfflineAiModel(offlineAiState, next => {
-                if (opId === offlineAiOperationRef.current) {
-                    setOfflineAiState(next);
-                }
-            }).catch(() => {
-                // Silent fail — user can retry via button
-            });
-        }
-    }, []);
 
     useEffect(() => {
         keyboardHapticsRef.current = keyboardHaptics;
@@ -16482,13 +16483,13 @@ const WorkspaceApp: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v300') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v301') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v300')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v301')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -16513,7 +16514,7 @@ const WorkspaceApp: React.FC = () => {
 
             try {
                 setBootLog('Loading local interpreter...');
-                const py = await (window.__PYODIDE_BOOT_PROMISE__ ?? Promise.reject(
+                const py = await (window.__PYODIDE_BOOT_PROMISE__ ?? window.__START_LOCAL_PYTHON__?.() ?? Promise.reject(
                     new Error('Python startup was not initialized. Please refresh.')
                 ));
                 window.__PYODIDE_INSTANCE__ = py;
@@ -16574,6 +16575,8 @@ const WorkspaceApp: React.FC = () => {
     };
 
     const setProblemById = (id: number) => {
+        runGenerationRef.current += 1;
+        if (pythonRuntimeGenerationRef.current === null) setIsRunning(false);
         const ex = getExerciseById(id) ?? EXERCISES[0];
         setExercise(ex);
         localStorage.setItem('python_current_problem_id', String(ex.id));
@@ -16632,11 +16635,16 @@ const WorkspaceApp: React.FC = () => {
         });
     };
 
-    const tryAiAutoWinFallback = async (request: AiReviewRequest): Promise<{ review: AiReviewResult | null; autoWinReview: AiReviewResult | null }> => {
+    const tryAiAutoWinFallback = async (
+        request: AiReviewRequest,
+        isCurrent: () => boolean = () => true,
+    ): Promise<{ review: AiReviewResult | null; autoWinReview: AiReviewResult | null }> => {
         try {
             const review = await withAiReviewTimeout(reviewWithAvailableAi(request, offlineAiState));
-            setLatestAiReviewResult(review);
-            setAiHintText(formatAiReviewHintText(review, appLang));
+            if (isCurrent()) {
+                setLatestAiReviewResult(review);
+                setAiHintText(formatAiReviewHintText(review, appLang));
+            }
             return {
                 review,
                 autoWinReview: isAiAutoWinReview(review) ? review : null,
@@ -16647,8 +16655,10 @@ const WorkspaceApp: React.FC = () => {
                 graderMessage: `AI fallback failed: ${String(error?.message || error || 'Unknown error')}`,
                 graderPassed: false,
             });
-            setLatestAiReviewResult(fallback);
-            setAiHintText(formatAiReviewHintText(fallback, appLang));
+            if (isCurrent()) {
+                setLatestAiReviewResult(fallback);
+                setAiHintText(formatAiReviewHintText(fallback, appLang));
+            }
             return { review: fallback, autoWinReview: null };
         }
     };
@@ -16670,7 +16680,10 @@ const WorkspaceApp: React.FC = () => {
             setOutputStatus('fail');
             return;
         }
+        const runGeneration = ++runGenerationRef.current;
+        const isCurrentRun = () => runGenerationRef.current === runGeneration;
         const autoGrader = !plainMode ? AUTO_GRADERS[exercise.id] : null;
+        pythonRuntimeGenerationRef.current = runGeneration;
         setIsRunning(true);
         setOutputStatus('running');
         setOutput(t('output.executing', appLang));
@@ -16727,8 +16740,26 @@ builtins.input = __app_input
 
             const activeFile = files[activeFileIndex];
             let stdout = '';
-            const code = `exec(compile(${JSON.stringify(activeFile.content)}, ${JSON.stringify(activeFile.name)}, 'exec'))`;
+            const code = `
+import sys as __app_sys
+import time as __app_time
+__app_trace_count = 0
+__app_deadline = __app_time.monotonic() + ${USER_CODE_TIMEOUT_SECONDS}
+def __app_trace(frame, event, arg):
+    global __app_trace_count
+    if event == "line":
+        __app_trace_count += 1
+        if __app_trace_count % ${USER_CODE_TIMEOUT_CHECK_INTERVAL} == 0 and __app_time.monotonic() > __app_deadline:
+            raise TimeoutError("__PY_EXECUTION_TIMEOUT__")
+    return __app_trace
+__app_sys.settrace(__app_trace)
+try:
+    exec(compile(${JSON.stringify(activeFile.content)}, ${JSON.stringify(activeFile.name)}, 'exec'))
+finally:
+    __app_sys.settrace(None)
+`;
             await activePyodide.runPythonAsync(code);
+            if (!isCurrentRun()) return;
             stdout = activePyodide.runPython("sys.stdout.getvalue()");
             stdinValuesRef.current = [];
             setStdinValues([]);
@@ -16773,7 +16804,15 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     setOutputStatus('info');
                     setPendingNextProblem(true);
                     setOutput(`${displayOutput}${t('output.autoCheck', appLang)}\n${localizeAiText(gradeResult.message, appLang)}\n\n${t('output.checkingLogic', appLang)}`);
-                    const aiFallback = await tryAiAutoWinFallback(reviewRequest);
+                    if (pythonRuntimeGenerationRef.current === runGeneration) {
+                        pythonRuntimeGenerationRef.current = null;
+                    }
+                    setIsRunning(false);
+                    // Paint the unlocked editor before optional AI review work begins.
+                    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+                    if (!isCurrentRun()) return;
+                    const aiFallback = await tryAiAutoWinFallback(reviewRequest, isCurrentRun);
+                    if (!isCurrentRun()) return;
                     if (aiFallback.autoWinReview) {
                         updateCurrentModeStats('success');
                         setOutputStatus('win');
@@ -16802,7 +16841,12 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 setOutput(`${stdout || t('output.successNoOutput', appLang)}\n\n${t('output.noGrader', appLang, String(exercise.id))}`);
             }
         } catch (err: any) {
-            const errorMessage = String(err?.message || err || '');
+            let errorMessage = String(err?.message || err || '');
+            if (errorMessage.includes('__PY_EXECUTION_TIMEOUT__')) {
+                errorMessage = appLang === 'fr'
+                    ? `L’exécution a été arrêtée après ${USER_CODE_TIMEOUT_SECONDS} secondes. Vérifiez les boucles infinies ou les calculs trop volumineux.`
+                    : `Execution stopped after ${USER_CODE_TIMEOUT_SECONDS} seconds. Check for an infinite loop or an excessively large calculation.`;
+            }
             const inputMarker = '__PY_INPUT_REQUIRED__';
             if (errorMessage.includes(inputMarker)) {
                 const prompt = errorMessage.split(inputMarker).pop()?.trim() || t('output.inputRequired', appLang);
@@ -16849,7 +16893,9 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                 setOutput(`${userOutput}${localizeAiText(errorMessage, appLang)}`);
             }
         } finally {
-            setIsRunning(false);
+            const ownsPythonRuntime = pythonRuntimeGenerationRef.current === runGeneration;
+            if (ownsPythonRuntime) pythonRuntimeGenerationRef.current = null;
+            if (isCurrentRun() || ownsPythonRuntime) setIsRunning(false);
         }
     };
 
