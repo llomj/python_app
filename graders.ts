@@ -13230,6 +13230,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
         tests: [
             { args: [{ Alice: 85, Bob: 90 }], expected: 175 },
             { args: [{ A: 1, B: 2, C: 3 }], expected: 6 },
+            { args: [{}], expected: 0 },
         ]
     },
   1617: {
