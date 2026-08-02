@@ -66,6 +66,7 @@ import { buildSolutionVariations } from './services/solutionVariations';
 import { getExerciseEditorCode, isGenericExerciseStarter, isIncompleteExerciseScaffold } from './services/codeScaffold';
 import { splitAiReviewSteps, stripAiReviewCodeExplanation } from './services/aiReviewFormatting';
 import { buildDetailedCodeExplanation } from './services/aiCodeExplanation';
+import { formatExerciseDescription } from './services/exercisePresentation';
 
 // Fixed: Removed local AIStudio interface definition as it conflicts with environment-provided types.
 
@@ -5043,25 +5044,23 @@ const getModeLabel = (mode: ProblemMode, lang: 'en' | 'fr' = 'en') => {
 };
 
 const getExerciseDescription = (exercise: Exercise, lang: 'en' | 'fr') => {
+    let description: string;
     if (lang === 'fr' && FOUNDATION_INTERMEDIATE_FR[exercise.id]) {
-        return FOUNDATION_INTERMEDIATE_FR[exercise.id].description;
+        description = FOUNDATION_INTERMEDIATE_FR[exercise.id].description;
+    } else if (lang === 'fr' && ADVANCED_CONCEPT_FR[exercise.id]) {
+        description = ADVANCED_CONCEPT_FR[exercise.id].description;
+    } else if (lang === 'fr' && CONCEPT_EXPANSION_FR[exercise.id]) {
+        description = CONCEPT_EXPANSION_FR[exercise.id].description;
+    } else if (lang === 'fr' && WHILE_LOOP_PRACTICE_FR[exercise.id]) {
+        description = WHILE_LOOP_PRACTICE_FR[exercise.id].description;
+    } else if (lang === 'fr' && ATOMIC_BEGINNER_EXERCISES_FR[exercise.id]) {
+        description = ATOMIC_BEGINNER_EXERCISES_FR[exercise.id];
+    } else if (lang === 'fr' && EXERCISES_FR[exercise.id]) {
+        description = EXERCISES_FR[exercise.id];
+    } else {
+        description = exercise.description;
     }
-    if (lang === 'fr' && ADVANCED_CONCEPT_FR[exercise.id]) {
-        return ADVANCED_CONCEPT_FR[exercise.id].description;
-    }
-    if (lang === 'fr' && CONCEPT_EXPANSION_FR[exercise.id]) {
-        return CONCEPT_EXPANSION_FR[exercise.id].description;
-    }
-    if (lang === 'fr' && WHILE_LOOP_PRACTICE_FR[exercise.id]) {
-        return WHILE_LOOP_PRACTICE_FR[exercise.id].description;
-    }
-    if (lang === 'fr' && ATOMIC_BEGINNER_EXERCISES_FR[exercise.id]) {
-        return ATOMIC_BEGINNER_EXERCISES_FR[exercise.id];
-    }
-    if (lang === 'fr' && EXERCISES_FR[exercise.id]) {
-        return EXERCISES_FR[exercise.id];
-    }
-    return exercise.description;
+    return formatExerciseDescription(description, classifyExerciseDifficulty(exercise), lang);
 };
 
 // Ranking system
@@ -16484,13 +16483,13 @@ const WorkspaceApp: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v303') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v304') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v303')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v304')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
