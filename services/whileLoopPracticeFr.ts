@@ -498,5 +498,255 @@ export const WHILE_LOOP_PRACTICE_FR: Record<number, { description: string; hint:
     "description": "Écrivez une fonction Python appelée `run_length_decode` qui doit décode les paires lettre-compte où chaque compte est un chiffre décimal. Utilisez une boucle while.\nDifficulté : Difficile.",
     "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
     "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5658": {
+    "description": "Écrivez une fonction Python appelée `inclusive_range_easy` qui doit retourne chaque entier de `start` à `stop`. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5659": {
+    "description": "Écrivez une fonction Python appelée `exclusive_range_easy` qui doit retourne chaque entier de `start` jusqu’à `stop` exclu. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5660": {
+    "description": "Écrivez une fonction Python appelée `repeat_value_easy` qui doit retourne une liste contenant `value` exactement `count` fois. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5661": {
+    "description": "Écrivez une fonction Python appelée `first_even_values_easy` qui doit retourne les `count` premiers entiers pairs non négatifs. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5662": {
+    "description": "Écrivez une fonction Python appelée `first_odd_values_easy` qui doit retourne les `count` premiers entiers impairs positifs. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5663": {
+    "description": "Écrivez une fonction Python appelée `first_multiples_easy` qui doit retourne les `count` premiers multiples positifs de `number`. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5664": {
+    "description": "Écrivez une fonction Python appelée `positive_countdown_easy` qui doit retourne le compte à rebours positif de `number` à 1. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5665": {
+    "description": "Écrivez une fonction Python appelée `step_up_easy` qui doit retourne les valeurs de `start` à `stop` avec un `step` positif. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5666": {
+    "description": "Écrivez une fonction Python appelée `step_down_easy` qui doit retourne les valeurs positives en descendant de `start` par `step`. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5667": {
+    "description": "Écrivez une fonction Python appelée `number_labels_easy` qui doit retourne les chaînes `Number 1` à `Number n`. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5668": {
+    "description": "Écrivez une fonction Python appelée `repeated_addition_easy` qui doit ajoute `number` à un total exactement `times` fois. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5669": {
+    "description": "Écrivez une fonction Python appelée `steps_by_one_easy` qui doit compte combien d’additions de 1 font passer `start` à `stop`. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5670": {
+    "description": "Écrivez une fonction Python appelée `sum_first_evens_easy` qui doit retourne la somme des `count` premiers entiers pairs non négatifs. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5671": {
+    "description": "Écrivez une fonction Python appelée `sum_first_odds_easy` qui doit retourne la somme des `count` premiers entiers impairs positifs. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5672": {
+    "description": "Écrivez une fonction Python appelée `inclusive_count_easy` qui doit compte les entiers dans l’intervalle inclusif de `start` à `stop`. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5673": {
+    "description": "Écrivez une fonction Python appelée `inclusive_sum_easy` qui doit retourne la somme de tous les entiers de `start` à `stop`. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5674": {
+    "description": "Écrivez une fonction Python appelée `values_below_by_step_easy` qui doit compte les multiples positifs de `step` inférieurs à `limit`. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5675": {
+    "description": "Écrivez une fonction Python appelée `double_repeatedly_easy` qui doit double `value` exactement `times` fois. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5676": {
+    "description": "Écrivez une fonction Python appelée `halve_until_one_easy` qui doit retourne chaque entier obtenu en divisant `number` par deux jusqu’à 1. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5677": {
+    "description": "Écrivez une fonction Python appelée `add_until_limit_easy` qui doit retourne les valeurs après des additions répétées de `amount` sans dépasser `limit`. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5678": {
+    "description": "Écrivez une fonction Python appelée `copy_text_easy` qui doit retourne une copie de `text` construite caractère par caractère. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5679": {
+    "description": "Écrivez une fonction Python appelée `repeat_character_easy` qui doit retourne `character` répété `count` fois. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5680": {
+    "description": "Écrivez une fonction Python appelée `join_with_dashes_easy` qui doit retourne les caractères de `text` séparés par des tirets. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5681": {
+    "description": "Écrivez une fonction Python appelée `uppercase_each_easy` qui doit retourne `text` avec chaque caractère converti en majuscule. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5682": {
+    "description": "Écrivez une fonction Python appelée `lowercase_each_easy` qui doit retourne `text` avec chaque caractère converti en minuscule. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5683": {
+    "description": "Écrivez une fonction Python appelée `space_count_easy` qui doit compte les caractères espace dans `text`. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5684": {
+    "description": "Écrivez une fonction Python appelée `text_digit_count_easy` qui doit compte les caractères de `text` qui sont des chiffres décimaux. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5685": {
+    "description": "Écrivez une fonction Python appelée `text_letter_count_easy` qui doit compte les caractères alphabétiques dans `text`. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5686": {
+    "description": "Écrivez une fonction Python appelée `replace_character_easy` qui doit remplace chaque occurrence exacte de `old` dans `text` par `new`. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5687": {
+    "description": "Écrivez une fonction Python appelée `first_characters_easy` qui doit retourne au maximum les `count` premiers caractères de `text`. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5688": {
+    "description": "Écrivez une fonction Python appelée `last_characters_reversed_easy` qui doit retourne jusqu’à `count` caractères lus à l’envers depuis la fin de `text`. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5689": {
+    "description": "Écrivez une fonction Python appelée `odd_index_characters_easy` qui doit retourne les caractères aux indices 1, 3, 5, etc.. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5690": {
+    "description": "Écrivez une fonction Python appelée `duplicate_characters_easy` qui doit retourne une chaîne où chaque caractère de `text` apparaît deux fois. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5691": {
+    "description": "Écrivez une fonction Python appelée `text_before_space_easy` qui doit retourne les caractères avant le premier espace. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5692": {
+    "description": "Écrivez une fonction Python appelée `text_before_marker_easy` qui doit retourne les caractères avant le premier caractère `marker` exact. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5693": {
+    "description": "Écrivez une fonction Python appelée `copy_list_easy` qui doit retourne une nouvelle liste contenant les mêmes éléments dans le même ordre. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5694": {
+    "description": "Écrivez une fonction Python appelée `first_items_easy` qui doit retourne au maximum les `count` premiers éléments. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5695": {
+    "description": "Écrivez une fonction Python appelée `last_items_easy` qui doit retourne au maximum les `count` derniers éléments dans leur ordre initial. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5696": {
+    "description": "Écrivez une fonction Python appelée `item_count_easy` qui doit compte les éléments d’une liste sans utiliser `len()` comme résultat. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5697": {
+    "description": "Écrivez une fonction Python appelée `matching_value_count_easy` qui doit compte les éléments exactement égaux à `target`. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5698": {
+    "description": "Écrivez une fonction Python appelée `negative_to_zero_easy` qui doit retourne une liste où les valeurs négatives sont remplacées par 0. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5699": {
+    "description": "Écrivez une fonction Python appelée `add_one_each_easy` qui doit retourne une liste avec 1 ajouté à chaque nombre. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5700": {
+    "description": "Écrivez une fonction Python appelée `double_each_easy` qui doit retourne une liste avec chaque nombre doublé. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5701": {
+    "description": "Écrivez une fonction Python appelée `text_lengths_easy` qui doit retourne une liste contenant la longueur de chaque chaîne. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5702": {
+    "description": "Écrivez une fonction Python appelée `nonzero_values_easy` qui doit retourne une liste contenant uniquement les valeurs non nulles. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5703": {
+    "description": "Écrivez une fonction Python appelée `append_two_lists_easy` qui doit retourne une nouvelle liste contenant tous les éléments de `left` suivis de ceux de `right`. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5704": {
+    "description": "Écrivez une fonction Python appelée `index_item_pairs_easy` qui doit retourne une liste de paires `[index, élément]`. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5705": {
+    "description": "Écrivez une fonction Python appelée `true_value_count_easy` qui doit compte les valeurs qui sont exactement `True`. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5706": {
+    "description": "Écrivez une fonction Python appelée `last_item_seen_easy` qui doit retourne le dernier élément atteint en parcourant la liste, ou `None` pour une liste vide. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
+  },
+  "5707": {
+    "description": "Écrivez une fonction Python appelée `items_before_value_easy` qui doit retourne les éléments avant le premier `stop_value` exact. Utilisez une boucle while.\nDifficulté : Facile.",
+    "hint": "Identifiez l’état de la boucle, écrivez la condition d’arrêt et mettez l’état à jour à chaque chemin afin de garantir une progression sûre.",
+    "breakdown": "1. Initialisez l’état nécessaire avant la boucle.\n2. Écrivez une condition while qui s’arrête à la bonne limite.\n3. Effectuez l’opération demandée à chaque itération.\n4. Mettez à jour l’état afin que la condition devienne finalement False.\n5. Retournez le résultat terminé."
   }
 };

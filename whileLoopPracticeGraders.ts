@@ -3840,5 +3840,1905 @@ export const WHILE_LOOP_PRACTICE_GRADERS: Record<number, AutoGrader> = {
         "expected": ""
       }
     ]
+  },
+  "5658": {
+    "functionNames": [
+      "inclusive_range_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          2,
+          5
+        ],
+        "expected": [
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "args": [
+          4,
+          4
+        ],
+        "expected": [
+          4
+        ]
+      },
+      {
+        "args": [
+          5,
+          3
+        ],
+        "expected": []
+      }
+    ]
+  },
+  "5659": {
+    "functionNames": [
+      "exclusive_range_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          2,
+          5
+        ],
+        "expected": [
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "args": [
+          4,
+          4
+        ],
+        "expected": []
+      },
+      {
+        "args": [
+          0,
+          2
+        ],
+        "expected": [
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "5660": {
+    "functionNames": [
+      "repeat_value_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          "a",
+          3
+        ],
+        "expected": [
+          "a",
+          "a",
+          "a"
+        ]
+      },
+      {
+        "args": [
+          7,
+          1
+        ],
+        "expected": [
+          7
+        ]
+      },
+      {
+        "args": [
+          0,
+          0
+        ],
+        "expected": []
+      }
+    ]
+  },
+  "5661": {
+    "functionNames": [
+      "first_even_values_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          4
+        ],
+        "expected": [
+          0,
+          2,
+          4,
+          6
+        ]
+      },
+      {
+        "args": [
+          1
+        ],
+        "expected": [
+          0
+        ]
+      },
+      {
+        "args": [
+          0
+        ],
+        "expected": []
+      }
+    ]
+  },
+  "5662": {
+    "functionNames": [
+      "first_odd_values_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          4
+        ],
+        "expected": [
+          1,
+          3,
+          5,
+          7
+        ]
+      },
+      {
+        "args": [
+          1
+        ],
+        "expected": [
+          1
+        ]
+      },
+      {
+        "args": [
+          0
+        ],
+        "expected": []
+      }
+    ]
+  },
+  "5663": {
+    "functionNames": [
+      "first_multiples_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          3,
+          4
+        ],
+        "expected": [
+          3,
+          6,
+          9,
+          12
+        ]
+      },
+      {
+        "args": [
+          5,
+          1
+        ],
+        "expected": [
+          5
+        ]
+      },
+      {
+        "args": [
+          2,
+          0
+        ],
+        "expected": []
+      }
+    ]
+  },
+  "5664": {
+    "functionNames": [
+      "positive_countdown_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          4
+        ],
+        "expected": [
+          4,
+          3,
+          2,
+          1
+        ]
+      },
+      {
+        "args": [
+          1
+        ],
+        "expected": [
+          1
+        ]
+      },
+      {
+        "args": [
+          0
+        ],
+        "expected": []
+      }
+    ]
+  },
+  "5665": {
+    "functionNames": [
+      "step_up_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          1,
+          7,
+          2
+        ],
+        "expected": [
+          1,
+          3,
+          5,
+          7
+        ]
+      },
+      {
+        "args": [
+          3,
+          3,
+          4
+        ],
+        "expected": [
+          3
+        ]
+      },
+      {
+        "args": [
+          5,
+          2,
+          1
+        ],
+        "expected": []
+      }
+    ]
+  },
+  "5666": {
+    "functionNames": [
+      "step_down_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          8,
+          3
+        ],
+        "expected": [
+          8,
+          5,
+          2
+        ]
+      },
+      {
+        "args": [
+          2,
+          5
+        ],
+        "expected": [
+          2
+        ]
+      },
+      {
+        "args": [
+          0,
+          2
+        ],
+        "expected": []
+      }
+    ]
+  },
+  "5667": {
+    "functionNames": [
+      "number_labels_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          3
+        ],
+        "expected": [
+          "Number 1",
+          "Number 2",
+          "Number 3"
+        ]
+      },
+      {
+        "args": [
+          1
+        ],
+        "expected": [
+          "Number 1"
+        ]
+      },
+      {
+        "args": [
+          0
+        ],
+        "expected": []
+      }
+    ]
+  },
+  "5668": {
+    "functionNames": [
+      "repeated_addition_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          4,
+          3
+        ],
+        "expected": 12
+      },
+      {
+        "args": [
+          7,
+          0
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          -2,
+          4
+        ],
+        "expected": -8
+      }
+    ]
+  },
+  "5669": {
+    "functionNames": [
+      "steps_by_one_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          2,
+          6
+        ],
+        "expected": 4
+      },
+      {
+        "args": [
+          5,
+          5
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          8,
+          3
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  "5670": {
+    "functionNames": [
+      "sum_first_evens_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          4
+        ],
+        "expected": 12
+      },
+      {
+        "args": [
+          1
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          0
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  "5671": {
+    "functionNames": [
+      "sum_first_odds_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          4
+        ],
+        "expected": 16
+      },
+      {
+        "args": [
+          1
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          0
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  "5672": {
+    "functionNames": [
+      "inclusive_count_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          3,
+          6
+        ],
+        "expected": 4
+      },
+      {
+        "args": [
+          5,
+          5
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          7,
+          2
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  "5673": {
+    "functionNames": [
+      "inclusive_sum_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          2,
+          5
+        ],
+        "expected": 14
+      },
+      {
+        "args": [
+          4,
+          4
+        ],
+        "expected": 4
+      },
+      {
+        "args": [
+          5,
+          2
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  "5674": {
+    "functionNames": [
+      "values_below_by_step_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          10,
+          3
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          5,
+          5
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          9,
+          2
+        ],
+        "expected": 4
+      }
+    ]
+  },
+  "5675": {
+    "functionNames": [
+      "double_repeatedly_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          3,
+          2
+        ],
+        "expected": 12
+      },
+      {
+        "args": [
+          5,
+          0
+        ],
+        "expected": 5
+      },
+      {
+        "args": [
+          1,
+          4
+        ],
+        "expected": 16
+      }
+    ]
+  },
+  "5676": {
+    "functionNames": [
+      "halve_until_one_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          10
+        ],
+        "expected": [
+          10,
+          5,
+          2,
+          1
+        ]
+      },
+      {
+        "args": [
+          1
+        ],
+        "expected": [
+          1
+        ]
+      },
+      {
+        "args": [
+          0
+        ],
+        "expected": []
+      }
+    ]
+  },
+  "5677": {
+    "functionNames": [
+      "add_until_limit_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          2,
+          3,
+          10
+        ],
+        "expected": [
+          2,
+          5,
+          8
+        ]
+      },
+      {
+        "args": [
+          5,
+          2,
+          5
+        ],
+        "expected": [
+          5
+        ]
+      },
+      {
+        "args": [
+          7,
+          1,
+          3
+        ],
+        "expected": []
+      }
+    ]
+  },
+  "5678": {
+    "functionNames": [
+      "copy_text_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          "cat"
+        ],
+        "expected": "cat"
+      },
+      {
+        "args": [
+          ""
+        ],
+        "expected": ""
+      },
+      {
+        "args": [
+          "A b"
+        ],
+        "expected": "A b"
+      }
+    ]
+  },
+  "5679": {
+    "functionNames": [
+      "repeat_character_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          "x",
+          4
+        ],
+        "expected": "xxxx"
+      },
+      {
+        "args": [
+          "a",
+          1
+        ],
+        "expected": "a"
+      },
+      {
+        "args": [
+          "z",
+          0
+        ],
+        "expected": ""
+      }
+    ]
+  },
+  "5680": {
+    "functionNames": [
+      "join_with_dashes_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          "cat"
+        ],
+        "expected": "c-a-t"
+      },
+      {
+        "args": [
+          "A"
+        ],
+        "expected": "A"
+      },
+      {
+        "args": [
+          ""
+        ],
+        "expected": ""
+      }
+    ]
+  },
+  "5681": {
+    "functionNames": [
+      "uppercase_each_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          "Hello"
+        ],
+        "expected": "HELLO"
+      },
+      {
+        "args": [
+          "a1"
+        ],
+        "expected": "A1"
+      },
+      {
+        "args": [
+          ""
+        ],
+        "expected": ""
+      }
+    ]
+  },
+  "5682": {
+    "functionNames": [
+      "lowercase_each_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          "PyTHon"
+        ],
+        "expected": "python"
+      },
+      {
+        "args": [
+          "A1"
+        ],
+        "expected": "a1"
+      },
+      {
+        "args": [
+          ""
+        ],
+        "expected": ""
+      }
+    ]
+  },
+  "5683": {
+    "functionNames": [
+      "space_count_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          "a b c"
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          "none"
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "  "
+        ],
+        "expected": 2
+      }
+    ]
+  },
+  "5684": {
+    "functionNames": [
+      "text_digit_count_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          "a1b23"
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          "hello"
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "007"
+        ],
+        "expected": 3
+      }
+    ]
+  },
+  "5685": {
+    "functionNames": [
+      "text_letter_count_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          "a1 B!"
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          "123"
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "Python"
+        ],
+        "expected": 6
+      }
+    ]
+  },
+  "5686": {
+    "functionNames": [
+      "replace_character_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          "banana",
+          "a",
+          "o"
+        ],
+        "expected": "bonono"
+      },
+      {
+        "args": [
+          "cat",
+          "x",
+          "z"
+        ],
+        "expected": "cat"
+      },
+      {
+        "args": [
+          "",
+          "a",
+          "b"
+        ],
+        "expected": ""
+      }
+    ]
+  },
+  "5687": {
+    "functionNames": [
+      "first_characters_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          "python",
+          3
+        ],
+        "expected": "pyt"
+      },
+      {
+        "args": [
+          "hi",
+          5
+        ],
+        "expected": "hi"
+      },
+      {
+        "args": [
+          "abc",
+          0
+        ],
+        "expected": ""
+      }
+    ]
+  },
+  "5688": {
+    "functionNames": [
+      "last_characters_reversed_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          "python",
+          3
+        ],
+        "expected": "noh"
+      },
+      {
+        "args": [
+          "hi",
+          5
+        ],
+        "expected": "ih"
+      },
+      {
+        "args": [
+          "abc",
+          0
+        ],
+        "expected": ""
+      }
+    ]
+  },
+  "5689": {
+    "functionNames": [
+      "odd_index_characters_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          "abcdef"
+        ],
+        "expected": "bdf"
+      },
+      {
+        "args": [
+          "a"
+        ],
+        "expected": ""
+      },
+      {
+        "args": [
+          "python"
+        ],
+        "expected": "yhn"
+      }
+    ]
+  },
+  "5690": {
+    "functionNames": [
+      "duplicate_characters_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          "cat"
+        ],
+        "expected": "ccaatt"
+      },
+      {
+        "args": [
+          "A"
+        ],
+        "expected": "AA"
+      },
+      {
+        "args": [
+          ""
+        ],
+        "expected": ""
+      }
+    ]
+  },
+  "5691": {
+    "functionNames": [
+      "text_before_space_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          "hello world"
+        ],
+        "expected": "hello"
+      },
+      {
+        "args": [
+          "python"
+        ],
+        "expected": "python"
+      },
+      {
+        "args": [
+          " starts"
+        ],
+        "expected": ""
+      }
+    ]
+  },
+  "5692": {
+    "functionNames": [
+      "text_before_marker_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          "abc:def",
+          ":"
+        ],
+        "expected": "abc"
+      },
+      {
+        "args": [
+          "hello",
+          "x"
+        ],
+        "expected": "hello"
+      },
+      {
+        "args": [
+          "!wow",
+          "!"
+        ],
+        "expected": ""
+      }
+    ]
+  },
+  "5693": {
+    "functionNames": [
+      "copy_list_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          [
+            1,
+            2,
+            3
+          ]
+        ],
+        "expected": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "args": [
+          [
+            "a"
+          ]
+        ],
+        "expected": [
+          "a"
+        ]
+      },
+      {
+        "args": [
+          []
+        ],
+        "expected": []
+      }
+    ]
+  },
+  "5694": {
+    "functionNames": [
+      "first_items_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          [
+            1,
+            2,
+            3,
+            4
+          ],
+          2
+        ],
+        "expected": [
+          1,
+          2
+        ]
+      },
+      {
+        "args": [
+          [
+            "a"
+          ],
+          3
+        ],
+        "expected": [
+          "a"
+        ]
+      },
+      {
+        "args": [
+          [
+            1,
+            2
+          ],
+          0
+        ],
+        "expected": []
+      }
+    ]
+  },
+  "5695": {
+    "functionNames": [
+      "last_items_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          [
+            1,
+            2,
+            3,
+            4
+          ],
+          2
+        ],
+        "expected": [
+          3,
+          4
+        ]
+      },
+      {
+        "args": [
+          [
+            "a"
+          ],
+          3
+        ],
+        "expected": [
+          "a"
+        ]
+      },
+      {
+        "args": [
+          [
+            1,
+            2
+          ],
+          0
+        ],
+        "expected": []
+      }
+    ]
+  },
+  "5696": {
+    "functionNames": [
+      "item_count_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          [
+            1,
+            2,
+            3
+          ]
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          []
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          [
+            "a"
+          ]
+        ],
+        "expected": 1
+      }
+    ]
+  },
+  "5697": {
+    "functionNames": [
+      "matching_value_count_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          [
+            1,
+            2,
+            1,
+            1
+          ],
+          1
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          [
+            "a",
+            "b"
+          ],
+          "x"
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          [],
+          0
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  "5698": {
+    "functionNames": [
+      "negative_to_zero_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          [
+            -2,
+            3,
+            -1
+          ]
+        ],
+        "expected": [
+          0,
+          3,
+          0
+        ]
+      },
+      {
+        "args": [
+          [
+            0,
+            4
+          ]
+        ],
+        "expected": [
+          0,
+          4
+        ]
+      },
+      {
+        "args": [
+          []
+        ],
+        "expected": []
+      }
+    ]
+  },
+  "5699": {
+    "functionNames": [
+      "add_one_each_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          [
+            1,
+            2,
+            3
+          ]
+        ],
+        "expected": [
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "args": [
+          [
+            -1,
+            0
+          ]
+        ],
+        "expected": [
+          0,
+          1
+        ]
+      },
+      {
+        "args": [
+          []
+        ],
+        "expected": []
+      }
+    ]
+  },
+  "5700": {
+    "functionNames": [
+      "double_each_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          [
+            1,
+            2,
+            3
+          ]
+        ],
+        "expected": [
+          2,
+          4,
+          6
+        ]
+      },
+      {
+        "args": [
+          [
+            -2,
+            0
+          ]
+        ],
+        "expected": [
+          -4,
+          0
+        ]
+      },
+      {
+        "args": [
+          []
+        ],
+        "expected": []
+      }
+    ]
+  },
+  "5701": {
+    "functionNames": [
+      "text_lengths_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          [
+            "cat",
+            "a",
+            ""
+          ]
+        ],
+        "expected": [
+          3,
+          1,
+          0
+        ]
+      },
+      {
+        "args": [
+          [
+            "hello"
+          ]
+        ],
+        "expected": [
+          5
+        ]
+      },
+      {
+        "args": [
+          []
+        ],
+        "expected": []
+      }
+    ]
+  },
+  "5702": {
+    "functionNames": [
+      "nonzero_values_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          [
+            0,
+            2,
+            0,
+            -1
+          ]
+        ],
+        "expected": [
+          2,
+          -1
+        ]
+      },
+      {
+        "args": [
+          [
+            0,
+            0
+          ]
+        ],
+        "expected": []
+      },
+      {
+        "args": [
+          [
+            3
+          ]
+        ],
+        "expected": [
+          3
+        ]
+      }
+    ]
+  },
+  "5703": {
+    "functionNames": [
+      "append_two_lists_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "expected": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "args": [
+          [],
+          [
+            "a"
+          ]
+        ],
+        "expected": [
+          "a"
+        ]
+      },
+      {
+        "args": [
+          [
+            1
+          ],
+          []
+        ],
+        "expected": [
+          1
+        ]
+      }
+    ]
+  },
+  "5704": {
+    "functionNames": [
+      "index_item_pairs_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          [
+            "a",
+            "b"
+          ]
+        ],
+        "expected": [
+          [
+            0,
+            "a"
+          ],
+          [
+            1,
+            "b"
+          ]
+        ]
+      },
+      {
+        "args": [
+          [
+            5
+          ]
+        ],
+        "expected": [
+          [
+            0,
+            5
+          ]
+        ]
+      },
+      {
+        "args": [
+          []
+        ],
+        "expected": []
+      }
+    ]
+  },
+  "5705": {
+    "functionNames": [
+      "true_value_count_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          [
+            true,
+            false,
+            true
+          ]
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          [
+            1,
+            true,
+            0
+          ]
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          []
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  "5706": {
+    "functionNames": [
+      "last_item_seen_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          [
+            4,
+            5
+          ]
+        ],
+        "expected": 5
+      },
+      {
+        "args": [
+          [
+            "a"
+          ]
+        ],
+        "expected": "a"
+      },
+      {
+        "args": [
+          []
+        ],
+        "expected": null
+      }
+    ]
+  },
+  "5707": {
+    "functionNames": [
+      "items_before_value_easy"
+    ],
+    "requiredNodePatterns": [
+      {
+        "nodeType": "While",
+        "minCount": 1
+      }
+    ],
+    "tests": [
+      {
+        "args": [
+          [
+            1,
+            2,
+            0,
+            3
+          ],
+          0
+        ],
+        "expected": [
+          1,
+          2
+        ]
+      },
+      {
+        "args": [
+          [
+            "a",
+            "b"
+          ],
+          "x"
+        ],
+        "expected": [
+          "a",
+          "b"
+        ]
+      },
+      {
+        "args": [
+          [
+            9
+          ],
+          9
+        ],
+        "expected": []
+      }
+    ]
   }
 };
