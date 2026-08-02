@@ -18,7 +18,13 @@ const DIFFICULTY_LABELS: Record<'en' | 'fr', Record<ExerciseDifficulty, string>>
 };
 
 const DIFFICULTY_LINE = /^\s*(?:Difficulty|Difficulté)\s*:[^\n]*$/i;
-const EXAMPLES_LINE = /^\s*(?:Examples?|Exemples?)\s*:/im;
+const EXAMPLES_LINE = /^\s*(?:Examples?|Example output|Exemples?|Exemple de sortie)\s*:/im;
+
+export interface ExerciseDescriptionSections {
+  task: string;
+  difficulty: string;
+  examples: string;
+}
 
 export const formatExerciseDescription = (
   description: string,
@@ -43,4 +49,18 @@ export const formatExerciseDescription = (
   const before = body.slice(0, examples.index).trimEnd();
   const after = body.slice(examples.index).trimStart();
   return `${before}\n\n${label}\n\n${after}`;
+};
+
+export const splitExerciseDescription = (description: string): ExerciseDescriptionSections => {
+  const lines = String(description || '').replace(/\r\n?/g, '\n').trim().split('\n');
+  const difficultyIndex = lines.findIndex(line => DIFFICULTY_LINE.test(line));
+  const examplesIndex = lines.findIndex(line => EXAMPLES_LINE.test(line));
+  const taskEndCandidates = [difficultyIndex, examplesIndex].filter(index => index >= 0);
+  const taskEnd = taskEndCandidates.length ? Math.min(...taskEndCandidates) : lines.length;
+
+  return {
+    task: lines.slice(0, taskEnd).join('\n').trim(),
+    difficulty: difficultyIndex >= 0 ? lines[difficultyIndex].trim() : '',
+    examples: examplesIndex >= 0 ? lines.slice(examplesIndex).join('\n').trim() : '',
+  };
 };

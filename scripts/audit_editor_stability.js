@@ -54,6 +54,16 @@ requirePattern(
     /fontVariantLigatures: "none"[\s\S]*?\.cm-cursor, \.cm-dropCursor[\s\S]*?borderLeftWidth: "2px"/,
     'The editor theme must use stable character metrics and an explicit caret.',
 );
+requirePattern(
+    app,
+    /key=\{`exercise-description-\$\{exercise\.id\}-\$\{appLang\}`\}[\s\S]*?data-problem-description-content/,
+    'The problem description scroller must reset when the exercise or language changes.',
+);
+requirePattern(
+    app,
+    /scrollSnapType: 'y proximity'[\s\S]*?data-problem-difficulty[\s\S]*?minHeight: '2rem'[\s\S]*?scrollSnapStop: 'always'/,
+    'Difficulty must render as a complete scroll-snapped block instead of clipped text.',
+);
 
 if (/longPressTimerRef|addEventListener\('touchstart', startLongPress/.test(app)) {
     failures.push('Custom touch long-press handling must not compete with native mobile caret placement.');
@@ -71,6 +81,7 @@ console.log('Native mobile caret and key repeat: checked');
 console.log('Debounced keyboard viewport handling: checked');
 console.log('Editor-toolbar layout invariant: checked');
 console.log('Explicit stable caret styling: checked');
+console.log('Problem description reset and difficulty visibility: checked');
 
 if (failures.length > 0) {
     failures.forEach(failure => console.error(`- ${failure}`));

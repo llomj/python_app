@@ -66,7 +66,7 @@ import { buildSolutionVariations } from './services/solutionVariations';
 import { getExerciseEditorCode, isGenericExerciseStarter, isIncompleteExerciseScaffold } from './services/codeScaffold';
 import { splitAiReviewSteps, stripAiReviewCodeExplanation } from './services/aiReviewFormatting';
 import { buildDetailedCodeExplanation } from './services/aiCodeExplanation';
-import { formatExerciseDescription } from './services/exercisePresentation';
+import { formatExerciseDescription, splitExerciseDescription } from './services/exercisePresentation';
 
 // Fixed: Removed local AIStudio interface definition as it conflicts with environment-provided types.
 
@@ -15798,6 +15798,7 @@ const WorkspaceApp: React.FC = () => {
     const editorContentTop = editorToolbarTop + 54;
     const runButtonLabel = 'RUN';
     const runButtonClass = 'ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#22c55e1a] border border-[#22c55e4d] text-[#22c55e]';
+    const problemDescriptionSections = splitExerciseDescription(getExerciseDescription(exercise, appLang));
     const selectedModeLabel = getModeLabel(difficultyMode, appLang);
     const currentStats = statsByMode[difficultyMode] ?? EMPTY_STATS;
     const currentModeRank = useMemo(() => getModeRank(currentStats), [currentStats]);
@@ -16483,13 +16484,13 @@ const WorkspaceApp: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v306') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v307') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v306')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v307')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -20263,8 +20264,59 @@ print(result)
                                 </button>
                             </div>
                         </div>
-                        <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', color: editorColors.problemText, fontSize: '0.875rem', lineHeight: 1.75, whiteSpace: 'pre-wrap', wordWrap: 'break-word', overflowWrap: 'break-word', padding: '0.25rem 1rem 0.75rem', fontFamily: 'inherit', userSelect: 'text', WebkitUserSelect: 'text', WebkitOverflowScrolling: 'touch' }}>
-                            {getExerciseDescription(exercise, appLang)}
+                        <div
+                            key={`exercise-description-${exercise.id}-${appLang}`}
+                            data-problem-description-content
+                            style={{
+                                flex: 1,
+                                minHeight: 0,
+                                overflowY: 'auto',
+                                overflowX: 'hidden',
+                                overscrollBehavior: 'contain',
+                                scrollSnapType: 'y proximity',
+                                scrollPaddingBlock: '0.75rem',
+                                color: editorColors.problemText,
+                                fontSize: '0.875rem',
+                                lineHeight: '1.5rem',
+                                wordWrap: 'break-word',
+                                overflowWrap: 'anywhere',
+                                padding: '0.35rem 1rem 1rem',
+                                fontFamily: 'inherit',
+                                userSelect: 'text',
+                                WebkitUserSelect: 'text',
+                                WebkitOverflowScrolling: 'touch',
+                            }}
+                        >
+                            <div data-problem-task style={{ whiteSpace: 'pre-wrap', margin: 0 }}>
+                                {problemDescriptionSections.task}
+                            </div>
+                            {problemDescriptionSections.difficulty && (
+                                <div
+                                    data-problem-difficulty
+                                    style={{
+                                        minHeight: '2rem',
+                                        margin: '0.75rem 0',
+                                        padding: '0.25rem 0.6rem',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        borderLeft: `3px solid ${countRowColors.count}`,
+                                        borderRadius: '0.35rem',
+                                        backgroundColor: hexToRgba(countRowColors.count, 0.09),
+                                        lineHeight: '1.5rem',
+                                        whiteSpace: 'normal',
+                                        overflow: 'visible',
+                                        scrollSnapAlign: 'start',
+                                        scrollSnapStop: 'always',
+                                    }}
+                                >
+                                    {problemDescriptionSections.difficulty}
+                                </div>
+                            )}
+                            {problemDescriptionSections.examples && (
+                                <div data-problem-examples style={{ whiteSpace: 'pre-wrap', margin: 0, scrollSnapAlign: 'start' }}>
+                                    {problemDescriptionSections.examples}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

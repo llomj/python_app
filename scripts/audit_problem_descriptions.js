@@ -12,12 +12,12 @@ const bundle = path.join(tempDir, 'entry.cjs');
 
 fs.writeFileSync(entry, [
   `export { EXERCISES } from ${JSON.stringify(path.join(root, 'exercises.ts'))};`,
-  `export { formatExerciseDescription } from ${JSON.stringify(path.join(root, 'services/exercisePresentation.ts'))};`,
+  `export { formatExerciseDescription, splitExerciseDescription } from ${JSON.stringify(path.join(root, 'services/exercisePresentation.ts'))};`,
 ].join('\n'));
 
 try {
   buildSync({ entryPoints: [entry], outfile: bundle, bundle: true, platform: 'node', format: 'cjs', logLevel: 'silent' });
-  const { EXERCISES, formatExerciseDescription } = require(bundle);
+  const { EXERCISES, formatExerciseDescription, splitExerciseDescription } = require(bundle);
   const failures = [];
 
   for (const exercise of EXERCISES) {
@@ -41,6 +41,8 @@ try {
       .join('\n');
     const english = formatExerciseDescription(withoutDifficulty, 'beginner', 'en');
     const french = formatExerciseDescription(withoutDifficulty, 'beginner', 'fr');
+    const englishSections = splitExerciseDescription(english);
+    const frenchSections = splitExerciseDescription(french);
     if (!/^Difficulty:\s*Easy\./m.test(english)) failures.push(`Problem ${exercise.id}: English difficulty missing`);
     if (!/^Difficulté\s*:\s*Facile\./m.test(french)) failures.push(`Problem ${exercise.id}: French difficulty missing`);
     if (!/\n\nDifficulty:\s*Easy\./m.test(english)) failures.push(`Problem ${exercise.id}: blank line before English difficulty missing`);
@@ -51,6 +53,9 @@ try {
     if (englishExample >= 0 && !/Difficulty:\s*Easy\.\n\nExamples?\s*:/m.test(english)) failures.push(`Problem ${exercise.id}: blank line before English examples missing`);
     const frenchExample = french.search(/^Exemples?\s*:/m);
     if (frenchExample >= 0 && !/Difficulté\s*:\s*Facile\.\n\nExemples?\s*:/m.test(french)) failures.push(`Problem ${exercise.id}: blank line before French examples missing`);
+    if (!englishSections.task || !englishSections.difficulty) failures.push(`Problem ${exercise.id}: English task sections incomplete`);
+    if (!frenchSections.task || !frenchSections.difficulty) failures.push(`Problem ${exercise.id}: French task sections incomplete`);
+    if (/\\n(?:Examples?|Example output|Exemples?)\s*:/i.test(description)) failures.push(`Problem ${exercise.id}: escaped structural newlines found`);
   }
 
   const problem856 = EXERCISES.find(exercise => exercise.id === 856);
