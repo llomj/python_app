@@ -16483,13 +16483,13 @@ const WorkspaceApp: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v304') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v305') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v304')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v305')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);

@@ -43,9 +43,14 @@ try {
     const french = formatExerciseDescription(withoutDifficulty, 'beginner', 'fr');
     if (!/^Difficulty:\s*Easy\./m.test(english)) failures.push(`Problem ${exercise.id}: English difficulty missing`);
     if (!/^Difficulté\s*:\s*Facile\./m.test(french)) failures.push(`Problem ${exercise.id}: French difficulty missing`);
+    if (!/\n\nDifficulty:\s*Easy\./m.test(english)) failures.push(`Problem ${exercise.id}: blank line before English difficulty missing`);
+    if (!/\n\nDifficulté\s*:\s*Facile\./m.test(french)) failures.push(`Problem ${exercise.id}: blank line before French difficulty missing`);
     const englishExample = english.search(/^Examples?\s*:/m);
     const englishDifficulty = english.search(/^Difficulty\s*:/m);
     if (englishExample >= 0 && englishDifficulty > englishExample) failures.push(`Problem ${exercise.id}: difficulty appears after examples`);
+    if (englishExample >= 0 && !/Difficulty:\s*Easy\.\n\nExamples?\s*:/m.test(english)) failures.push(`Problem ${exercise.id}: blank line before English examples missing`);
+    const frenchExample = french.search(/^Exemples?\s*:/m);
+    if (frenchExample >= 0 && !/Difficulté\s*:\s*Facile\.\n\nExemples?\s*:/m.test(french)) failures.push(`Problem ${exercise.id}: blank line before French examples missing`);
   }
 
   const problem856 = EXERCISES.find(exercise => exercise.id === 856);

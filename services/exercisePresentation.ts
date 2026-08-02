@@ -17,7 +17,7 @@ const DIFFICULTY_LABELS: Record<'en' | 'fr', Record<ExerciseDifficulty, string>>
   },
 };
 
-const DIFFICULTY_LINE = /^\s*(?:Difficulty|Difficulté)\s*:/im;
+const DIFFICULTY_LINE = /^\s*(?:Difficulty|Difficulté)\s*:[^\n]*$/i;
 const EXAMPLES_LINE = /^\s*(?:Examples?|Exemples?)\s*:/im;
 
 export const formatExerciseDescription = (
@@ -26,15 +26,21 @@ export const formatExerciseDescription = (
   language: 'en' | 'fr',
 ): string => {
   const clean = String(description || '').replace(/\r\n?/g, '\n').trim();
-  if (!clean || DIFFICULTY_LINE.test(clean)) return clean;
+  if (!clean) return clean;
+
+  const body = clean
+    .split('\n')
+    .filter(line => !DIFFICULTY_LINE.test(line))
+    .join('\n')
+    .trim();
 
   const label = language === 'fr'
     ? `Difficulté : ${DIFFICULTY_LABELS.fr[difficulty]}.`
     : `Difficulty: ${DIFFICULTY_LABELS.en[difficulty]}.`;
-  const examples = clean.match(EXAMPLES_LINE);
-  if (!examples || examples.index === undefined) return `${clean}\n${label}`;
+  const examples = body.match(EXAMPLES_LINE);
+  if (!examples || examples.index === undefined) return `${body}\n\n${label}`;
 
-  const before = clean.slice(0, examples.index).trimEnd();
-  const after = clean.slice(examples.index).trimStart();
-  return `${before}\n${label}\n${after}`;
+  const before = body.slice(0, examples.index).trimEnd();
+  const after = body.slice(examples.index).trimStart();
+  return `${before}\n\n${label}\n\n${after}`;
 };
