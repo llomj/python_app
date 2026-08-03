@@ -22,6 +22,21 @@ requirePattern(app, /requestAnimationFrame\(\(\) => resolve\(\)\)/, 'The editor 
 requirePattern(entry, /window\.__START_LOCAL_PYTHON__ = startLocalPython/, 'Python startup must begin from the mounted app instead of competing with the initial bundle.');
 requirePattern(entry, /requestIdleCallback\(preload/, 'Optional curriculum preloading must wait for browser idle time.');
 
+const gradeDecisionStart = app.indexOf('if (gradeResult.passed) {');
+const deterministicFailureStart = app.indexOf("} else {\n                    updateCurrentModeStats('failed');", gradeDecisionStart);
+const deterministicFailureEnd = app.indexOf("\n            } else {\n                setOutputStatus('info');", deterministicFailureStart);
+const deterministicFailureBranch = deterministicFailureStart >= 0 && deterministicFailureEnd > deterministicFailureStart
+    ? app.slice(deterministicFailureStart, deterministicFailureEnd)
+    : '';
+
+if (!deterministicFailureBranch) failures.push('The deterministic grader failure branch must remain auditable.');
+if (/updateCurrentModeStats\('success'\)|setOutputStatus\('win'\)|playResultFeedback\('win'\)/.test(deterministicFailureBranch)) {
+    failures.push('AI review must not convert a deterministic grader failure into a win.');
+}
+if (!/updateCurrentModeStats\('failed'\)[\s\S]*setOutputStatus\('fail'\)/.test(deterministicFailureBranch)) {
+    failures.push('A deterministic grader failure must record a failed attempt and show red failure output.');
+}
+
 if (/Auto-download offline AI model on first launch/.test(app)) {
     failures.push('The optional offline AI model must not download automatically during startup.');
 }
@@ -33,6 +48,7 @@ console.log('Exercise-pool caching: checked');
 console.log('Deferred stats work: checked');
 console.log('Stale run cancellation: checked');
 console.log('Runaway Python guard: checked');
+console.log('Deterministic failure remains failed after AI review: checked');
 
 if (failures.length) {
     failures.forEach(failure => console.error(`- ${failure}`));

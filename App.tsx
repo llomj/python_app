@@ -118,15 +118,6 @@ const localizeProblemAiBuiltInAnswer = (answer: string, language: 'en' | 'fr'): 
 type GeneralAiMode = 'simple' | 'normal' | 'deep' | 'examples';
 type GeneralAiKnowledgeModule = typeof import('./services/pythonKnowledge');
 
-const AI_AUTO_WIN_MIN_CONFIDENCE = 0.75;
-const AI_AUTO_WIN_MODEL_SOURCES: ReadonlySet<AiReviewResult['source']> = new Set(['offline_model', 'ollama', 'gemini', 'online_api']);
-
-const isAiAutoWinReview = (review: AiReviewResult) => (
-    AI_AUTO_WIN_MODEL_SOURCES.has(review.source) &&
-    review.verdict === 'likely_correct' &&
-    review.confidence >= AI_AUTO_WIN_MIN_CONFIDENCE
-);
-
 const normalizeGeneralPythonQuestion = (rawQuestion: string): string => {
     let normalized = rawQuestion.trim();
     const replacements: Array<[RegExp, string]> = [
@@ -16517,13 +16508,13 @@ const WorkspaceApp: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v308') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v309') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v308')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v309')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -16686,20 +16677,17 @@ const WorkspaceApp: React.FC = () => {
         });
     };
 
-    const tryAiAutoWinFallback = async (
+    const runAiGradingReview = async (
         request: AiReviewRequest,
         isCurrent: () => boolean = () => true,
-    ): Promise<{ review: AiReviewResult | null; autoWinReview: AiReviewResult | null }> => {
+    ): Promise<AiReviewResult | null> => {
         try {
             const review = await withAiReviewTimeout(reviewWithAvailableAi(request, offlineAiState));
             if (isCurrent()) {
                 setLatestAiReviewResult(review);
                 setAiHintText(formatAiReviewHintText(review, appLang));
             }
-            return {
-                review,
-                autoWinReview: isAiAutoWinReview(review) ? review : null,
-            };
+            return review;
         } catch (error: any) {
             const fallback = buildDiagnosticReview({
                 ...request,
@@ -16710,7 +16698,7 @@ const WorkspaceApp: React.FC = () => {
                 setLatestAiReviewResult(fallback);
                 setAiHintText(formatAiReviewHintText(fallback, appLang));
             }
-            return { review: fallback, autoWinReview: null };
+            return fallback;
         }
     };
 
@@ -16867,9 +16855,11 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     setPendingNextProblem(true);
                     setOutput(`${displayOutput}${t('output.autoWin', appLang)}\n${localizeAiText(gradeResult.message, appLang)}\n\n${t('output.useNext', appLang)}`);
                 } else {
-                    setOutputStatus('info');
+                    updateCurrentModeStats('failed');
+                    setOutputStatus('fail');
+                    playResultFeedback('fail');
                     setPendingNextProblem(true);
-                    setOutput(`${displayOutput}${t('output.autoCheck', appLang)}\n${localizeAiText(gradeResult.message, appLang)}\n\n${t('output.checkingLogic', appLang)}`);
+                    setOutput(`${displayOutput}${t('output.autoFailed', appLang)}\n${localizeAiText(gradeResult.message, appLang)}\n\n${t('output.checkingLogic', appLang)}`);
                     if (pythonRuntimeGenerationRef.current === runGeneration) {
                         pythonRuntimeGenerationRef.current = null;
                     }
@@ -16877,30 +16867,21 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                     // Paint the unlocked editor before optional AI review work begins.
                     await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
                     if (!isCurrentRun()) return;
-                    const aiFallback = await tryAiAutoWinFallback(reviewRequest, isCurrentRun);
+                    const review = await runAiGradingReview(reviewRequest, isCurrentRun);
                     if (!isCurrentRun()) return;
-                    if (aiFallback.autoWinReview) {
-                        updateCurrentModeStats('success');
-                        setOutputStatus('win');
-                        playResultFeedback('win');
-                        const aiWinDetail = appLang === 'fr'
-                            ? `Le correcteur déterministe a échoué, mais ${getAiReviewSourceLabel(aiFallback.autoWinReview.source, appLang)} a jugé cette réponse logiquement correcte avec une confiance de ${Math.round(aiFallback.autoWinReview.confidence * 100)} %.`
-                            : `Deterministic grader failed, but ${getAiReviewSourceLabel(aiFallback.autoWinReview.source, appLang)} judged this answer logically correct with ${Math.round(aiFallback.autoWinReview.confidence * 100)}% confidence.`;
-                        setOutput(`${displayOutput}${t('output.aiAutoWin', appLang)}\n${aiWinDetail}\n\n${t('output.originalGrader', appLang)}\n${localizeAiText(gradeResult.message, appLang)}\n\n${t('output.useNext', appLang)}`);
-                    } else {
-                        updateCurrentModeStats('failed');
-                        setOutputStatus('fail');
-                        playResultFeedback('fail');
-                        const review = aiFallback.review;
-                        const reviewNote = review
-                            ? review.source === 'diagnostic'
-                                ? `\n\n${t('output.diagnosticOnly', appLang)}`
+                    setOutputStatus('fail');
+                    const reviewNote = review
+                        ? review.source === 'diagnostic'
+                            ? `\n\n${t('output.diagnosticOnly', appLang)}`
+                            : review.verdict === 'likely_correct'
+                                ? appLang === 'fr'
+                                    ? `\n\nLe correcteur déterministe a échoué, mais ${getAiReviewSourceLabel(review.source, appLang)} a jugé cette réponse logiquement correcte avec une confiance de ${Math.round(review.confidence * 100)} %. Cette tentative reste un échec et aucun point de réussite n'est accordé.`
+                                    : `\n\nDeterministic grader failed, but ${getAiReviewSourceLabel(review.source, appLang)} judged this answer logically correct with ${Math.round(review.confidence * 100)}% confidence. This attempt remains failed and no win point is awarded.`
                                 : appLang === 'fr'
-                                    ? `\n\nLa révision IA a conclu « ${review.verdict === 'likely_correct' ? 'probablement correct' : review.verdict === 'likely_incorrect' ? 'probablement incorrect' : 'incertain'} » avec une confiance de ${Math.round(review.confidence * 100)} %, via ${getAiReviewSourceLabel(review.source, appLang)}.`
+                                    ? `\n\nLa révision IA a conclu « ${review.verdict === 'likely_incorrect' ? 'probablement incorrect' : 'incertain'} » avec une confiance de ${Math.round(review.confidence * 100)} %, via ${getAiReviewSourceLabel(review.source, appLang)}.`
                                     : `\n\nAI reviewer returned ${review.verdict.replace('_', ' ')} with ${Math.round(review.confidence * 100)}% confidence from ${getAiReviewSourceLabel(review.source, appLang)}.`
-                            : `\n\n${t('output.aiUnavailable', appLang)}`;
-                        setOutput(`${displayOutput}${t('output.autoFailed', appLang)}\n${localizeAiText(gradeResult.message, appLang)}${reviewNote}\n\n${t('output.fixAndRun', appLang)}`);
-                    }
+                        : `\n\n${t('output.aiUnavailable', appLang)}`;
+                    setOutput(`${displayOutput}${t('output.autoFailed', appLang)}\n${localizeAiText(gradeResult.message, appLang)}${reviewNote}\n\n${t('output.fixAndRun', appLang)}`);
                 }
             } else {
                 setOutputStatus('info');
