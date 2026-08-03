@@ -11,7 +11,7 @@ const requirePattern = (source, pattern, message) => {
     if (!pattern.test(source)) failures.push(message);
 };
 
-requirePattern(app, /const EXERCISE_POOL_CACHE = new Map<ProblemMode, Exercise\[\]>/, 'Exercise pools must be cached.');
+requirePattern(app, /const EXERCISE_POOL_CACHE = new Map<(?:ProblemMode|string), Exercise\[\]>/, 'Exercise pools must be cached.');
 requirePattern(app, /statsPanelsVisible \? DIFFICULTY_MODES\.map/, 'Stats calculations must be deferred until their panel is visible.');
 requirePattern(app, /const setProblemById = \(id: number\) => \{[\s\S]*?runGenerationRef\.current \+= 1;/, 'Changing problems must invalidate stale runs.');
 requirePattern(app, /if \(!isCurrentRun\(\)\) return;/, 'Async run results must be discarded after Next changes the problem.');

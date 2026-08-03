@@ -4295,6 +4295,7 @@ type OutputStatus = 'idle' | 'running' | 'win' | 'fail' | 'info';
 type DifficultyMode = 'normal' | 'atomic_beginner' | 'beginner' | 'intermediate' | 'expert' | 'legend';
 type ConceptModeId = `concept:${string}`;
 type ProblemMode = DifficultyMode | ConceptModeId;
+type ConceptDifficulty = 'all' | 'easy' | 'intermediate' | 'expert';
 type StatsByMode = Record<string, Stats>;
 type CustomizeModalTab = 'count' | 'ide' | 'tools' | 'panels' | 'layout';
 
@@ -4443,6 +4444,18 @@ const DIFFICULTY_MODES: Array<{ id: DifficultyMode; label: string; description: 
     { id: 'expert', label: 'Expert', description: 'Nested data, constraints, algorithms' },
     { id: 'legend', label: 'Legend', description: 'Recursion, OOP, files, advanced modules' }
 ];
+
+const CONCEPT_DIFFICULTIES: Array<{ id: ConceptDifficulty; label: string; labelFr: string; description: string; descriptionFr: string }> = [
+    { id: 'all', label: 'All Levels', labelFr: 'Tous les niveaux', description: 'Mix Easy, Intermediate, and Expert problems', descriptionFr: 'Mélange les problèmes faciles, intermédiaires et experts' },
+    { id: 'easy', label: 'Easy', labelFr: 'Facile', description: 'Only beginner-friendly problems', descriptionFr: 'Uniquement les problèmes adaptés aux débutants' },
+    { id: 'intermediate', label: 'Intermediate', labelFr: 'Intermédiaire', description: 'Only intermediate problems', descriptionFr: 'Uniquement les problèmes intermédiaires' },
+    { id: 'expert', label: 'Expert', labelFr: 'Expert', description: 'Only expert and legend problems', descriptionFr: 'Uniquement les problèmes experts et légende' },
+];
+
+const getConceptDifficultyLabel = (difficulty: ConceptDifficulty, lang: 'en' | 'fr' = 'en') => {
+    const option = CONCEPT_DIFFICULTIES.find(item => item.id === difficulty) ?? CONCEPT_DIFFICULTIES[0];
+    return lang === 'fr' ? option.labelFr : option.label;
+};
 
 interface ConceptMode {
     id: ConceptModeId;
@@ -5131,6 +5144,11 @@ const getSavedDifficultyMode = (): ProblemMode => {
     return savedMode && MODE_OPTIONS.some(mode => mode.id === savedMode) ? savedMode : 'normal';
 };
 
+const getSavedConceptDifficulty = (): ConceptDifficulty => {
+    const savedDifficulty = localStorage.getItem('python_concept_difficulty') as ConceptDifficulty | null;
+    return CONCEPT_DIFFICULTIES.some(option => option.id === savedDifficulty) ? savedDifficulty as ConceptDifficulty : 'all';
+};
+
 const scoreExerciseDifficulty = (exercise: Exercise): number => {
     const text = `${exercise.title} ${exercise.description} ${exercise.initialCode} ${exercise.solution}`.toLowerCase();
     let score = 0;
@@ -5343,10 +5361,19 @@ const getExerciseById = (id: number | null): Exercise | null => {
     return EXERCISES.find(item => item.id === id) ?? null;
 };
 
-const EXERCISE_POOL_CACHE = new Map<ProblemMode, Exercise[]>();
+const EXERCISE_POOL_CACHE = new Map<string, Exercise[]>();
 
-const getExercisePoolForMode = (mode: ProblemMode): Exercise[] => {
-    const cached = EXERCISE_POOL_CACHE.get(mode);
+const exerciseMatchesConceptDifficulty = (exercise: Exercise, difficulty: ConceptDifficulty) => {
+    if (difficulty === 'all') return true;
+    const classified = classifyExerciseDifficulty(exercise);
+    if (difficulty === 'easy') return classified === 'atomic_beginner' || classified === 'beginner';
+    if (difficulty === 'expert') return classified === 'expert' || classified === 'legend';
+    return classified === 'intermediate';
+};
+
+const getExercisePoolForMode = (mode: ProblemMode, conceptDifficulty: ConceptDifficulty = 'all'): Exercise[] => {
+    const cacheKey = isConceptMode(mode) ? `${mode}:${conceptDifficulty}` : mode;
+    const cached = EXERCISE_POOL_CACHE.get(cacheKey);
     if (cached) return cached;
 
     let pool: Exercise[];
@@ -5355,19 +5382,19 @@ const getExercisePoolForMode = (mode: ProblemMode): Exercise[] => {
     else {
         const concept = getConceptForMode(mode);
         if (concept) {
-            pool = EXERCISES.filter(item => exerciseMatchesConcept(item, concept));
+            pool = EXERCISES.filter(item => exerciseMatchesConcept(item, concept) && exerciseMatchesConceptDifficulty(item, conceptDifficulty));
         } else {
             const difficultyPool = EXERCISES.filter(item => classifyExerciseDifficulty(item) === mode);
             pool = difficultyPool.length > 0 ? difficultyPool : EXERCISES;
         }
     }
 
-    EXERCISE_POOL_CACHE.set(mode, pool);
+    EXERCISE_POOL_CACHE.set(cacheKey, pool);
     return pool;
 };
 
-const getRandomExerciseForMode = (mode: ProblemMode, excludeId?: number): Exercise => {
-    const pool = getExercisePoolForMode(mode);
+const getRandomExerciseForMode = (mode: ProblemMode, excludeId?: number, conceptDifficulty: ConceptDifficulty = 'all'): Exercise => {
+    const pool = getExercisePoolForMode(mode, conceptDifficulty);
     if (pool.length === 0) return EXERCISES[0];
     let index = Math.floor(Math.random() * pool.length);
     if (pool.length > 1 && excludeId && pool[index].id === excludeId) {
@@ -5378,14 +5405,15 @@ const getRandomExerciseForMode = (mode: ProblemMode, excludeId?: number): Exerci
 
 const getInitialExercise = (): Exercise => {
     const savedMode = getSavedDifficultyMode();
+    const savedConceptDifficulty = getSavedConceptDifficulty();
     const savedId = Number(localStorage.getItem('python_current_problem_id'));
     const savedExercise = getExerciseById(Number.isFinite(savedId) ? savedId : null);
 
-    if (savedExercise && getExercisePoolForMode(savedMode).some(item => item.id === savedExercise.id)) {
+    if (savedExercise && getExercisePoolForMode(savedMode, savedConceptDifficulty).some(item => item.id === savedExercise.id)) {
         return savedExercise;
     }
 
-    return getRandomExerciseForMode(savedMode);
+    return getRandomExerciseForMode(savedMode, undefined, savedConceptDifficulty);
 };
 
 export const buildAutoGradeScript = (grader: AutoGrader, sourceCode = '', sourceName = 'main.py') => `
@@ -15548,11 +15576,16 @@ const WorkspaceApp: React.FC = () => {
     const [apiEndpoint, setApiEndpoint] = useState(() => loadOnlineAiConfig().endpoint);
     const [apiModel, setApiModel] = useState(() => loadOnlineAiConfig().model);
     const [difficultyMode, setDifficultyMode] = useState<ProblemMode>(() => getSavedDifficultyMode());
+    const [conceptDifficulty, setConceptDifficulty] = useState<ConceptDifficulty>(() => getSavedConceptDifficulty());
+    const [pendingConceptMode, setPendingConceptMode] = useState<ConceptModeId | null>(null);
     useEffect(() => {
         if (solutionTab === 'concept' && !isConceptMode(difficultyMode)) {
             setSolutionTab('code');
         }
     }, [solutionTab, difficultyMode]);
+    useEffect(() => {
+        if (showModal !== 'settings') setPendingConceptMode(null);
+    }, [showModal]);
     const [countRowColors, setCountRowColors] = useState<CountRowColorSettings>(() => loadColorSettings('python_count_row_colors', DEFAULT_COUNT_ROW_COLORS));
     const [editorColors, setEditorColors] = useState<EditorColorSettings>(() => loadColorSettings('python_editor_colors', DEFAULT_EDITOR_COLORS));
     const [toolPanelColors, setToolPanelColors] = useState<ToolPanelColorSettings>(() => loadToolPanelColorSettings());
@@ -15799,7 +15832,7 @@ const WorkspaceApp: React.FC = () => {
     const runButtonLabel = 'RUN';
     const runButtonClass = 'ml-1 flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold text-xs bg-[#22c55e1a] border border-[#22c55e4d] text-[#22c55e]';
     const problemDescriptionSections = splitExerciseDescription(getExerciseDescription(exercise, appLang));
-    const selectedModeLabel = getModeLabel(difficultyMode, appLang);
+    const selectedModeLabel = `${getModeLabel(difficultyMode, appLang)}${isConceptMode(difficultyMode) ? ` · ${getConceptDifficultyLabel(conceptDifficulty, appLang)}` : ''}`;
     const currentStats = statsByMode[difficultyMode] ?? EMPTY_STATS;
     const currentModeRank = useMemo(() => getModeRank(currentStats), [currentStats]);
     const userRank = useMemo(() => getUserRank(statsByMode), [statsByMode]);
@@ -15839,8 +15872,8 @@ const WorkspaceApp: React.FC = () => {
         return localizeSolutionCodeDisplay(normalizeSolutionHeadings(variations), appLang);
     }, [exercise.id, exercise.solution, appLang]);
     const modeExerciseCount = useMemo(() => {
-        return getExercisePoolForMode(difficultyMode).length;
-    }, [difficultyMode]);
+        return getExercisePoolForMode(difficultyMode, conceptDifficulty).length;
+    }, [conceptDifficulty, difficultyMode]);
     const statsPanelsVisible = showModal === 'stats_by_mode' || (showModal === 'settings' && statsByModeSectionOpen);
     const difficultyStatsRows = useMemo(() => statsPanelsVisible ? DIFFICULTY_MODES.map(mode => {
         const modeStats = statsByMode[mode.id] ?? EMPTY_STATS;
@@ -16484,13 +16517,13 @@ const WorkspaceApp: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v307') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v308') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v307')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v308')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -16597,14 +16630,31 @@ const WorkspaceApp: React.FC = () => {
     };
 
     const loadRandomExercise = useCallback((mode: ProblemMode = difficultyMode) => {
-        const randomExercise = getRandomExerciseForMode(mode, exercise.id);
+        const randomExercise = getRandomExerciseForMode(mode, exercise.id, conceptDifficulty);
         setProblemById(randomExercise.id);
-    }, [difficultyMode, exercise.id, codeScaffoldEnabled, appLang]);
+    }, [difficultyMode, exercise.id, codeScaffoldEnabled, appLang, conceptDifficulty]);
 
     const handleDifficultyModeSelect = (mode: ProblemMode) => {
+        if (isConceptMode(mode)) {
+            setPendingConceptMode(mode);
+            return;
+        }
         setDifficultyMode(mode);
         localStorage.setItem('python_difficulty_mode', mode);
         const nextExercise = getRandomExerciseForMode(mode, exercise.id);
+        setProblemById(nextExercise.id);
+    };
+
+    const handleConceptDifficultySelect = (selectedDifficulty: ConceptDifficulty) => {
+        if (!pendingConceptMode) return;
+        const pool = getExercisePoolForMode(pendingConceptMode, selectedDifficulty);
+        if (pool.length === 0) return;
+        setConceptDifficulty(selectedDifficulty);
+        setDifficultyMode(pendingConceptMode);
+        localStorage.setItem('python_concept_difficulty', selectedDifficulty);
+        localStorage.setItem('python_difficulty_mode', pendingConceptMode);
+        const nextExercise = getRandomExerciseForMode(pendingConceptMode, exercise.id, selectedDifficulty);
+        setPendingConceptMode(null);
         setProblemById(nextExercise.id);
     };
 
@@ -21915,7 +21965,7 @@ print(result)
                                             </button>
                                             <div className="min-w-0">
                                                 <h3 className="text-xs font-black uppercase tracking-[0.16em] text-gray-200">{t('settings.chooseConcept', appLang)}</h3>
-                                                {selectedConceptMode && <p className="mt-0.5 truncate text-[10px]" style={{ color: countRowColors.wins }}>{getModeLabel(selectedConceptMode.id, appLang)}</p>}
+                                                {selectedConceptMode && <p className="mt-0.5 truncate text-[10px]" style={{ color: countRowColors.wins }}>{getModeLabel(selectedConceptMode.id, appLang)} · {getConceptDifficultyLabel(conceptDifficulty, appLang)}</p>}
                                             </div>
                                         </div>
                                         <button
@@ -21939,14 +21989,14 @@ print(result)
                                                     return (
                                                         <button
                                                             key={concept.id}
-                                                            onClick={() => handleDifficultyModeSelect(concept.id)}
+                                                            onClick={() => setPendingConceptMode(concept.id)}
                                                             className="w-full rounded-xl border px-3 py-2 text-left transition-all hover:brightness-125"
                                                             style={isSelected ? { borderColor: countRowColors.wins, backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: countRowColors.wins } : { borderColor: '#1d2d44', backgroundColor: 'rgba(7, 18, 37, 0.7)', color: '#ffffff' }}
                                                         >
                                                             <span className="flex items-center justify-between gap-3">
                                                                 <span className="text-xs font-black uppercase tracking-[0.14em]">{translatedLabel}</span>
                                                                 <span className="flex items-center gap-2 text-[10px]" style={{ color: isSelected ? countRowColors.wins : '#9ca3af' }}>
-                                                                    {count} {appLang === 'fr' ? 'problèmes' : 'problems'}
+                                                                    {isSelected ? getConceptDifficultyLabel(conceptDifficulty, appLang) : `${count} ${appLang === 'fr' ? 'problèmes' : 'problems'}`}
                                                                     {isSelected && <Check size={14} style={{ color: countRowColors.wins }} />}
                                                                 </span>
                                                             </span>
@@ -22476,6 +22526,80 @@ print(result)
                                 </div>
 
                                 <button onClick={() => { setResetConfirmArmed(false); setShowModal('restart_confirm'); }} className="w-full flex-shrink-0 border py-3 rounded-xl transition-all hover:brightness-125" style={{ borderColor: hexToRgba(toolPanelColors.failed, 0.4), color: toolPanelColors.failed, backgroundColor: hexToRgba(toolPanelColors.failed, 0.15) }}>{t('settings.resetProgress', appLang)}</button>
+
+                                {pendingConceptMode && (() => {
+                                    const pendingConcept = getConceptForMode(pendingConceptMode);
+                                    if (!pendingConcept) return null;
+                                    return (
+                                        <div
+                                            className="absolute inset-0 z-[60] flex items-center justify-center overflow-hidden rounded-3xl p-4 backdrop-blur-md"
+                                            style={{ backgroundColor: hexToRgba(panelColors.background, 0.88), touchAction: 'pan-y' }}
+                                            onClick={() => setPendingConceptMode(null)}
+                                        >
+                                            <div
+                                                role="dialog"
+                                                aria-modal="true"
+                                                aria-labelledby="concept-difficulty-title"
+                                                className="relative w-full max-w-md overflow-hidden rounded-2xl border p-4 shadow-2xl sm:p-5"
+                                                style={{ backgroundColor: hexToRgba(panelColors.background, 0.98), borderColor: panelColors.border }}
+                                                onClick={(event) => event.stopPropagation()}
+                                            >
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setPendingConceptMode(null)}
+                                                    className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full border text-gray-200 active:scale-95"
+                                                    style={{ backgroundColor: countRowColors.iconBackground, borderColor: panelColors.border }}
+                                                    aria-label={appLang === 'fr' ? 'Fermer' : 'Close'}
+                                                >
+                                                    <X size={20} />
+                                                </button>
+                                                <div className="pr-12">
+                                                    <p className="text-[10px] font-black uppercase tracking-[0.18em]" style={{ color: countRowColors.count }}>
+                                                        {appLang === 'fr' ? 'Choisir la difficulté' : 'Choose Difficulty'}
+                                                    </p>
+                                                    <h3 id="concept-difficulty-title" className="mt-1 text-lg font-black text-white">
+                                                        {getModeLabel(pendingConcept.id, appLang)}
+                                                    </h3>
+                                                    <p className="mt-1 text-[11px] leading-5 text-gray-400">
+                                                        {appLang === 'fr' ? 'Quels niveaux doivent apparaître au hasard ?' : 'Which levels should appear at random?'}
+                                                    </p>
+                                                </div>
+                                                <div className="mt-4 max-h-[55dvh] space-y-2 overflow-y-auto overflow-x-hidden overscroll-contain pr-1" style={{ touchAction: 'pan-y' }}>
+                                                    {CONCEPT_DIFFICULTIES.map(option => {
+                                                        const count = getExercisePoolForMode(pendingConcept.id, option.id).length;
+                                                        const isCurrent = difficultyMode === pendingConcept.id && conceptDifficulty === option.id;
+                                                        const disabled = count === 0;
+                                                        return (
+                                                            <button
+                                                                key={option.id}
+                                                                type="button"
+                                                                disabled={disabled}
+                                                                onClick={() => handleConceptDifficultySelect(option.id)}
+                                                                className="w-full rounded-xl border px-3 py-3 text-left transition-all enabled:hover:brightness-125 disabled:cursor-not-allowed disabled:opacity-40"
+                                                                style={isCurrent
+                                                                    ? { borderColor: countRowColors.wins, backgroundColor: hexToRgba(countRowColors.wins, 0.15) }
+                                                                    : { borderColor: '#1d2d44', backgroundColor: 'rgba(7, 18, 37, 0.8)' }}
+                                                            >
+                                                                <span className="flex items-center justify-between gap-3">
+                                                                    <span className="text-xs font-black uppercase tracking-[0.14em]" style={{ color: isCurrent ? countRowColors.wins : '#ffffff' }}>
+                                                                        {appLang === 'fr' ? option.labelFr : option.label}
+                                                                    </span>
+                                                                    <span className="flex items-center gap-2 text-[10px]" style={{ color: isCurrent ? countRowColors.wins : '#9ca3af' }}>
+                                                                        {count} {appLang === 'fr' ? 'problèmes' : 'problems'}
+                                                                        {isCurrent && <Check size={14} />}
+                                                                    </span>
+                                                                </span>
+                                                                <span className="mt-1 block text-[10px] leading-4 text-gray-400">
+                                                                    {appLang === 'fr' ? option.descriptionFr : option.description}
+                                                                </span>
+                                                            </button>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })()}
                             </div>
                         )}
                         {showModal === 'stats_by_mode' && (
