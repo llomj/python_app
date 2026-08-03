@@ -84,8 +84,13 @@ try {
     }
   }
 
-  const python = spawnSync('python3', ['-c', pythonChecks.join('\n\n')], { encoding: 'utf8', maxBuffer: 20 * 1024 * 1024 });
-  if (python.status !== 0) failures.push(`canonical solution execution failed: ${(python.stderr || python.stdout).trim()}`);
+  const pythonFile = path.join(tempDir, 'canonical-solutions.py');
+  fs.writeFileSync(pythonFile, pythonChecks.join('\n\n'));
+  const python = spawnSync('python3', [pythonFile], { encoding: 'utf8', maxBuffer: 20 * 1024 * 1024 });
+  if (python.status !== 0) {
+    const detail = python.error?.message || python.stderr || python.stdout || `python exited with status ${python.status}`;
+    failures.push(`canonical solution execution failed: ${String(detail).trim()}`);
+  }
 
   console.log('Easy concept practice audit');
   console.log(`Exercises: ${exercises.length}`);
