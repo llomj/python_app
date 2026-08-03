@@ -4,6 +4,7 @@ import { WHILE_LOOP_PRACTICE_EXERCISES } from './whileLoopPracticeExercises';
 import { CONCEPT_EXPANSION_EXERCISES } from './conceptExpansionExercises';
 import { ADVANCED_CONCEPT_EXERCISES } from './advancedConceptExercises';
 import { FOUNDATION_INTERMEDIATE_EXERCISES } from './foundationIntermediateExercises';
+import { EASY_CONCEPT_PRACTICE_EXERCISES } from './easyConceptPracticeExercises';
 
 interface ForLoopPracticeSpec {
     id: number;
@@ -24233,5 +24234,6 @@ export const EXERCISES: Exercise[] = [
     ...WHILE_LOOP_PRACTICE_EXERCISES,
     ...CONCEPT_EXPANSION_EXERCISES,
     ...ADVANCED_CONCEPT_EXERCISES,
-    ...FOUNDATION_INTERMEDIATE_EXERCISES
+    ...FOUNDATION_INTERMEDIATE_EXERCISES,
+    ...EASY_CONCEPT_PRACTICE_EXERCISES
 ];

@@ -101,6 +101,7 @@ let WHILE_LOOP_PRACTICE_FR: Record<number, GeneratedFrenchExercise> = {};
 let CONCEPT_EXPANSION_FR: Record<number, GeneratedFrenchExercise> = {};
 let ADVANCED_CONCEPT_FR: Record<number, GeneratedFrenchExercise> = {};
 let FOUNDATION_INTERMEDIATE_FR: Record<number, GeneratedFrenchExercise> = {};
+let EASY_CONCEPT_PRACTICE_FR: Record<number, GeneratedFrenchExercise> = {};
 
 interface ProblemAiMessage {
     id: number;
@@ -5049,7 +5050,9 @@ const getModeLabel = (mode: ProblemMode, lang: 'en' | 'fr' = 'en') => {
 
 const getExerciseDescription = (exercise: Exercise, lang: 'en' | 'fr') => {
     let description: string;
-    if (lang === 'fr' && FOUNDATION_INTERMEDIATE_FR[exercise.id]) {
+    if (lang === 'fr' && EASY_CONCEPT_PRACTICE_FR[exercise.id]) {
+        description = EASY_CONCEPT_PRACTICE_FR[exercise.id].description;
+    } else if (lang === 'fr' && FOUNDATION_INTERMEDIATE_FR[exercise.id]) {
         description = FOUNDATION_INTERMEDIATE_FR[exercise.id].description;
     } else if (lang === 'fr' && ADVANCED_CONCEPT_FR[exercise.id]) {
         description = ADVANCED_CONCEPT_FR[exercise.id].description;
@@ -16508,13 +16511,13 @@ const WorkspaceApp: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v309') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v310') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v309')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v310')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -17044,7 +17047,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         const q = lookupQuestion.toLowerCase();
         const description = getExerciseDescription(exercise, appLang);
         const generatedLocalization = appLang === 'fr'
-            ? WHILE_LOOP_PRACTICE_FR[exercise.id] ?? CONCEPT_EXPANSION_FR[exercise.id] ?? ADVANCED_CONCEPT_FR[exercise.id] ?? FOUNDATION_INTERMEDIATE_FR[exercise.id]
+            ? EASY_CONCEPT_PRACTICE_FR[exercise.id] ?? WHILE_LOOP_PRACTICE_FR[exercise.id] ?? CONCEPT_EXPANSION_FR[exercise.id] ?? ADVANCED_CONCEPT_FR[exercise.id] ?? FOUNDATION_INTERMEDIATE_FR[exercise.id]
             : null;
         const localizedExercise = generatedLocalization
             ? { ...exercise, description, hint: generatedLocalization.hint, breakdown: generatedLocalization.breakdown }
@@ -19565,7 +19568,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                 : isSlicingPractice ? 'slicing'
                                     : 'for loops';
         const localizedGenerated = lang === 'fr'
-            ? WHILE_LOOP_PRACTICE_FR[targetExercise.id] ?? CONCEPT_EXPANSION_FR[targetExercise.id] ?? ADVANCED_CONCEPT_FR[targetExercise.id] ?? FOUNDATION_INTERMEDIATE_FR[targetExercise.id]
+            ? EASY_CONCEPT_PRACTICE_FR[targetExercise.id] ?? WHILE_LOOP_PRACTICE_FR[targetExercise.id] ?? CONCEPT_EXPANSION_FR[targetExercise.id] ?? ADVANCED_CONCEPT_FR[targetExercise.id] ?? FOUNDATION_INTERMEDIATE_FR[targetExercise.id]
             : null;
         const breakdown = localizedGenerated?.breakdown ?? targetExercise.breakdown ?? '';
         const requiredStructure = isRegexPractice ? "Import and use Python's re module."
@@ -22960,6 +22963,7 @@ const App: React.FC = () => {
                 CONCEPT_EXPANSION_FR = catalog.conceptExpansionFr;
                 ADVANCED_CONCEPT_FR = catalog.advancedConceptFr;
                 FOUNDATION_INTERMEDIATE_FR = catalog.foundationIntermediateFr;
+                EASY_CONCEPT_PRACTICE_FR = catalog.easyConceptPracticeFr;
                 if (active) setCurriculumReady(true);
             })
             .catch(error => {
