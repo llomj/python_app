@@ -17,6 +17,7 @@ export interface CurriculumCatalog {
   advancedConceptFr: Record<number, GeneratedFrenchExercise>;
   foundationIntermediateFr: Record<number, GeneratedFrenchExercise>;
   easyConceptPracticeFr: Record<number, GeneratedFrenchExercise>;
+  conceptLevelExpansionFr: Record<number, GeneratedFrenchExercise>;
 }
 
 let curriculumPromise: Promise<CurriculumCatalog> | null = null;
@@ -34,6 +35,7 @@ export const preloadCurriculum = (): Promise<CurriculumCatalog> => {
     import('./services/advancedConceptFr'),
     import('./services/foundationIntermediateFr'),
     import('./services/easyConceptPracticeFr'),
+    import('./services/conceptLevelExpansionFr'),
   ]).then(([
     exercises,
     graders,
@@ -44,6 +46,7 @@ export const preloadCurriculum = (): Promise<CurriculumCatalog> => {
     advancedConceptFr,
     foundationIntermediateFr,
     easyConceptPracticeFr,
+    conceptLevelExpansionFr,
   ]) => ({
     exercises: exercises.EXERCISES,
     graders: graders.AUTO_GRADERS,
@@ -54,6 +57,7 @@ export const preloadCurriculum = (): Promise<CurriculumCatalog> => {
     advancedConceptFr: advancedConceptFr.ADVANCED_CONCEPT_FR,
     foundationIntermediateFr: foundationIntermediateFr.FOUNDATION_INTERMEDIATE_FR,
     easyConceptPracticeFr: easyConceptPracticeFr.EASY_CONCEPT_PRACTICE_FR,
+    conceptLevelExpansionFr: conceptLevelExpansionFr.CONCEPT_LEVEL_EXPANSION_FR,
   }));
 
   return curriculumPromise;

@@ -32,6 +32,8 @@ function loadTsExports(fileName) {
       if (specifier === './foundationIntermediateGraders') return loadTsExports('foundationIntermediateGraders.ts');
       if (specifier === './easyConceptPracticeExercises') return loadTsExports('easyConceptPracticeExercises.ts');
       if (specifier === './easyConceptPracticeGraders') return loadTsExports('easyConceptPracticeGraders.ts');
+      if (specifier === './conceptLevelExpansionExercises') return loadTsExports('conceptLevelExpansionExercises.ts');
+      if (specifier === './conceptLevelExpansionGraders') return loadTsExports('conceptLevelExpansionGraders.ts');
       return {};
     },
   };
