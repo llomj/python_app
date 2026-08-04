@@ -36,7 +36,8 @@ import {
     Bookmark,
     Terminal,
     BarChart3,
-    Sparkles
+    Sparkles,
+    Shuffle
 } from 'lucide-react';
 import CodeMirror from '@uiw/react-codemirror';
 import { python } from '@codemirror/lang-python';
@@ -15580,6 +15581,8 @@ const WorkspaceApp: React.FC = () => {
     const [solutionTab, setSolutionTab] = useState<'code' | 'logic' | 'requirements' | 'syntax' | 'concept'>('code');
     const [customizeTab, setCustomizeTab] = useState<CustomizeModalTab>('count');
     const [modeSectionOpen, setModeSectionOpen] = useState(false);
+    const [randomLevelPickerOpen, setRandomLevelPickerOpen] = useState(false);
+    const [randomLevelPracticeEnabled, setRandomLevelPracticeEnabled] = useState(() => localStorage.getItem('python_plain_mode') !== 'true' && localStorage.getItem('python_random_level_practice') === 'true');
     const [soundsSectionOpen, setSoundsSectionOpen] = useState(false);
     const [problemModeSectionOpen, setProblemModeSectionOpen] = useState(false);
     const [conceptModeSectionOpen, setConceptModeSectionOpen] = useState(false);
@@ -16649,13 +16652,13 @@ const WorkspaceApp: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v312') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v313') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v312')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v313')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -16767,6 +16770,8 @@ const WorkspaceApp: React.FC = () => {
     }, [difficultyMode, exercise.id, codeScaffoldEnabled, appLang, conceptDifficulty]);
 
     const handleDifficultyModeSelect = (mode: ProblemMode) => {
+        setRandomLevelPracticeEnabled(false);
+        localStorage.setItem('python_random_level_practice', 'false');
         if (isConceptMode(mode)) {
             setPendingConceptMode(mode);
             return;
@@ -16782,12 +16787,49 @@ const WorkspaceApp: React.FC = () => {
         const pool = getExercisePoolForMode(pendingConceptMode, selectedDifficulty);
         if (pool.length === 0) return;
         setConceptDifficulty(selectedDifficulty);
+        setRandomLevelPracticeEnabled(false);
+        localStorage.setItem('python_random_level_practice', 'false');
         setDifficultyMode(pendingConceptMode);
         localStorage.setItem('python_concept_difficulty', selectedDifficulty);
         localStorage.setItem('python_difficulty_mode', pendingConceptMode);
         const nextExercise = getRandomExerciseForMode(pendingConceptMode, exercise.id, selectedDifficulty);
         setPendingConceptMode(null);
         setProblemById(nextExercise.id);
+    };
+
+    const handleStandardExerciseMode = () => {
+        const mode: DifficultyMode = 'normal';
+        const nextExercise = getRandomExerciseForMode(mode, exercise.id);
+        setPlainMode(false);
+        setRandomLevelPracticeEnabled(false);
+        setRandomLevelPickerOpen(false);
+        setDifficultyMode(mode);
+        localStorage.setItem('python_plain_mode', 'false');
+        localStorage.setItem('python_random_level_practice', 'false');
+        localStorage.setItem('python_difficulty_mode', mode);
+        setProblemById(nextExercise.id);
+    };
+
+    const handleRandomLevelSelect = (mode: Extract<DifficultyMode, 'beginner' | 'intermediate' | 'expert'>) => {
+        const nextExercise = getRandomExerciseForMode(mode, exercise.id);
+        setPlainMode(false);
+        setRandomLevelPracticeEnabled(true);
+        setRandomLevelPickerOpen(false);
+        setDifficultyMode(mode);
+        localStorage.setItem('python_plain_mode', 'false');
+        localStorage.setItem('python_random_level_practice', 'true');
+        localStorage.setItem('python_difficulty_mode', mode);
+        setProblemById(nextExercise.id);
+    };
+
+    const handlePlainIdeMode = () => {
+        setPlainMode(true);
+        setRandomLevelPracticeEnabled(false);
+        setRandomLevelPickerOpen(false);
+        localStorage.setItem('python_random_level_practice', 'false');
+        setFiles([{ name: 'main.py', content: '' }]);
+        setOutput('');
+        setOutputStatus('idle');
     };
 
     const handleCodeScaffoldToggle = () => {
@@ -21922,50 +21964,83 @@ print(result)
                                         <ChevronDown size={16} className="text-gray-400 transition-transform" style={{ transform: modeSectionOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
                                     </button>
                                     {modeSectionOpen && (
-                                        <div className="mt-3 grid grid-cols-2 gap-2 animate-in fade-in duration-200">
-                                            <button
-                                                onClick={() => { const nextExercise = getInitialExercise(); setPlainMode(false); setExercise(nextExercise); setFiles([{ name: 'main.py', content: getExerciseEditorCode(nextExercise, codeScaffoldEnabled, AUTO_GRADERS[nextExercise.id], appLang) }]); }}
-                                                className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
-                                                style={!plainMode ? { borderColor: hexToRgba(countRowColors.wins, 0.6), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
-                                            >
-                                                <span className="mb-2 flex items-center justify-between gap-2">
-                                                    <span className="text-xs font-black uppercase tracking-[0.14em]">{t('settings.play', appLang)}</span>
-                                                    <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: !plainMode ? countRowColors.wins : '#6b7280' }}>{t('settings.on', appLang)}</span>
-                                                </span>
-                                                <span className="block text-xs font-bold">{t('settings.exercises', appLang)}</span>
-                                                <span className="mt-1 block text-[10px] text-gray-400">{t('settings.playDesc', appLang)}</span>
-                                            </button>
-                                            <button
-                                                onClick={() => { setPlainMode(true); setFiles([{ name: 'main.py', content: '' }]); setOutput(''); setOutputStatus('idle'); }}
-                                                className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
-                                                style={plainMode ? { borderColor: hexToRgba(countRowColors.count, 0.6), backgroundColor: hexToRgba(countRowColors.count, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
-                                            >
-                                                <span className="mb-2 flex items-center justify-between gap-2">
-                                                    <span className="text-xs font-black uppercase tracking-[0.14em]">{t('settings.plain', appLang)}</span>
-                                                    <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: plainMode ? countRowColors.count : '#6b7280' }}>{t('settings.on', appLang)}</span>
-                                                </span>
-                                                <span className="block text-xs font-bold">{t('settings.freeIde', appLang)}</span>
-                                                <span className="mt-1 block text-[10px] text-gray-400">{t('settings.plainDesc', appLang)}</span>
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={handleCodeScaffoldToggle}
-                                                className="col-span-2 w-full rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
-                                                style={codeScaffoldEnabled
-                                                    ? { borderColor: hexToRgba(countRowColors.wins, 0.65), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' }
-                                                    : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
-                                            >
-                                                <span className="mb-1 flex items-center justify-between gap-3">
-                                                    <span className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.14em]">
+                                        <div className="mt-3 animate-in fade-in duration-200">
+                                            <div className="grid grid-cols-2 gap-2">
+                                                <button
+                                                    onClick={handleStandardExerciseMode}
+                                                    className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
+                                                    style={!plainMode && !randomLevelPracticeEnabled ? { borderColor: hexToRgba(countRowColors.wins, 0.6), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
+                                                >
+                                                    <span className="mb-2 flex items-center justify-between gap-2">
+                                                        <span className="text-xs font-black uppercase tracking-[0.14em]">{t('settings.play', appLang)}</span>
+                                                        <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: !plainMode && !randomLevelPracticeEnabled ? countRowColors.wins : '#6b7280' }}>{t(!plainMode && !randomLevelPracticeEnabled ? 'settings.on' : 'settings.off', appLang)}</span>
+                                                    </span>
+                                                    <span className="block text-xs font-bold">{t('settings.exercises', appLang)}</span>
+                                                    <span className="mt-1 block text-[10px] text-gray-400">{t('settings.playDesc', appLang)}</span>
+                                                </button>
+                                                <button
+                                                    onClick={() => setRandomLevelPickerOpen(prev => !prev)}
+                                                    className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
+                                                    style={randomLevelPracticeEnabled ? { borderColor: hexToRgba(countRowColors.wins, 0.65), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
+                                                    aria-expanded={randomLevelPickerOpen}
+                                                >
+                                                    <span className="mb-2 flex items-center justify-between gap-2">
+                                                        <span className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.1em]"><Shuffle size={14} />{t('settings.randomLevel', appLang)}</span>
+                                                        <span className="flex items-center gap-1">
+                                                            <span className="text-[9px] font-black uppercase tracking-[0.1em]" style={{ color: randomLevelPracticeEnabled ? countRowColors.wins : '#6b7280' }}>{t(randomLevelPracticeEnabled ? 'settings.on' : 'settings.off', appLang)}</span>
+                                                            <Info size={13} style={{ color: countRowColors.count }} />
+                                                        </span>
+                                                    </span>
+                                                    <span className="block text-xs font-bold">{randomLevelPracticeEnabled ? getModeLabel(difficultyMode, appLang) : t('settings.chooseRandomLevel', appLang)}</span>
+                                                    <span className="mt-1 block text-[10px] leading-relaxed text-gray-400">{t('settings.randomLevelDesc', appLang)}</span>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={handleCodeScaffoldToggle}
+                                                    className="w-full rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
+                                                    style={codeScaffoldEnabled
+                                                        ? { borderColor: hexToRgba(countRowColors.wins, 0.65), backgroundColor: hexToRgba(countRowColors.wins, 0.15), color: '#ffffff' }
+                                                        : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
+                                                >
+                                                    <span className="mb-2 flex items-center justify-between gap-2">
                                                         <FileCode size={15} style={{ color: codeScaffoldEnabled ? countRowColors.wins : countRowColors.count }} />
-                                                        {t('settings.codeScaffold', appLang)}
+                                                        <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: codeScaffoldEnabled ? countRowColors.wins : '#6b7280' }}>{codeScaffoldEnabled ? t('settings.on', appLang) : t('settings.off', appLang)}</span>
                                                     </span>
-                                                    <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: codeScaffoldEnabled ? countRowColors.wins : '#6b7280' }}>
-                                                        {codeScaffoldEnabled ? t('settings.on', appLang) : t('settings.off', appLang)}
+                                                    <span className="block text-xs font-bold">{t('settings.codeScaffold', appLang)}</span>
+                                                    <span className="mt-1 block text-[10px] leading-relaxed text-gray-400">{t('settings.codeScaffoldDesc', appLang)}</span>
+                                                </button>
+                                                <button
+                                                    onClick={handlePlainIdeMode}
+                                                    className="rounded-xl border px-3 py-3 text-left transition-all hover:brightness-125"
+                                                    style={plainMode ? { borderColor: hexToRgba(countRowColors.count, 0.6), backgroundColor: hexToRgba(countRowColors.count, 0.15), color: '#ffffff' } : { borderColor: '#1d2d44', backgroundColor: 'rgba(5, 12, 24, 0.7)', color: '#9ca3af' }}
+                                                >
+                                                    <span className="mb-2 flex items-center justify-between gap-2">
+                                                        <span className="text-xs font-black uppercase tracking-[0.14em]">{t('settings.plain', appLang)}</span>
+                                                        <span className="text-[10px] font-black uppercase tracking-[0.14em]" style={{ color: plainMode ? countRowColors.count : '#6b7280' }}>{t(plainMode ? 'settings.on' : 'settings.off', appLang)}</span>
                                                     </span>
-                                                </span>
-                                                <span className="block text-[10px] leading-relaxed text-gray-400">{t('settings.codeScaffoldDesc', appLang)}</span>
-                                            </button>
+                                                    <span className="block text-xs font-bold">{t('settings.freeIde', appLang)}</span>
+                                                    <span className="mt-1 block text-[10px] text-gray-400">{t('settings.plainDesc', appLang)}</span>
+                                                </button>
+                                            </div>
+                                            {randomLevelPickerOpen && (
+                                                <div className="mt-2 rounded-xl border p-3" style={{ borderColor: hexToRgba(countRowColors.count, 0.45), backgroundColor: 'rgba(5, 12, 24, 0.82)' }}>
+                                                    <p className="mb-3 text-[10px] leading-relaxed text-gray-300">{t('settings.randomLevelHelp', appLang)}</p>
+                                                    <div className="grid grid-cols-3 gap-2">
+                                                        {(['beginner', 'intermediate', 'expert'] as const).map(mode => (
+                                                            <button
+                                                                key={mode}
+                                                                onClick={() => handleRandomLevelSelect(mode)}
+                                                                className="rounded-lg border px-2 py-2 text-[10px] font-black uppercase tracking-[0.08em] transition-all hover:brightness-125"
+                                                                style={randomLevelPracticeEnabled && difficultyMode === mode
+                                                                    ? { borderColor: countRowColors.wins, backgroundColor: hexToRgba(countRowColors.wins, 0.16), color: countRowColors.wins }
+                                                                    : { borderColor: '#1d2d44', backgroundColor: 'rgba(7, 18, 37, 0.7)', color: '#d1d5db' }}
+                                                            >
+                                                                {t(`mode.${mode}`, appLang)}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     )}
                                 </div>
