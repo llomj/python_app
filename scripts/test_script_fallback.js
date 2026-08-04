@@ -39,6 +39,8 @@ function loadTsExports(fileName) {
       if (request === './conceptLevelExpansionGraders') return loadTsExports('conceptLevelExpansionGraders.ts');
       if (request === './coreConceptExpansionExercises') return loadTsExports('coreConceptExpansionExercises.ts');
       if (request === './coreConceptExpansionGraders') return loadTsExports('coreConceptExpansionGraders.ts');
+      if (request === './supplementalConceptExercises') return loadTsExports('supplementalConceptExercises.ts');
+      if (request === './supplementalConceptGraders') return loadTsExports('supplementalConceptGraders.ts');
       if (request === './types') return {};
       if (request === 'react') {
         return {

@@ -105,6 +105,7 @@ let FOUNDATION_INTERMEDIATE_FR: Record<number, GeneratedFrenchExercise> = {};
 let EASY_CONCEPT_PRACTICE_FR: Record<number, GeneratedFrenchExercise> = {};
 let CONCEPT_LEVEL_EXPANSION_FR: Record<number, GeneratedFrenchExercise> = {};
 let CORE_CONCEPT_EXPANSION_FR: Record<number, GeneratedFrenchExercise> = {};
+let SUPPLEMENTAL_CONCEPT_FR: Record<number, GeneratedFrenchExercise> = {};
 
 interface ProblemAiMessage {
     id: number;
@@ -4485,7 +4486,7 @@ const PYTHON_CONCEPT_MODES: ConceptMode[] = [
     { id: 'concept:lambdas', label: 'Lambda / Map', description: 'lambda, map, filter, reduce', patterns: [/\blambda\b|\bmap\(\)|\bfilter\(\)|\breduce\(\)|\busing\s+map\b|\busing\s+filter\b|\busing\s+reduce\b/] },
     { id: 'concept:generators', label: 'Generators', description: 'yield and lazy iteration', patterns: [/\bgenerator\b|\byield\b|\biterator\b|\blazy\s+iteration\b/] },
     { id: 'concept:files', label: 'Files', description: 'open, read, write, CSV, JSON', patterns: [/\bfile\b|\bfiles\b|\bopen\(\)|\bread\(\)|\bwrite\(\)|\bcsv\b|\bjson\b|\bpathlib\b|\bwith\s+open\b/] },
-    { id: 'concept:exceptions', label: 'Exceptions', description: 'try, except, raise', patterns: [/\btry\b|\bexcept\b|\bfinally\b|\braise\b|\berror\s+handling\b|\bexception\b/] },
+    { id: 'concept:exceptions', label: 'Exceptions', description: 'try, except, raise', patterns: [/\btry\b|\bexcept\b|\bfinally\b|\braise\b|\berror\s+handling\b|\bexception\b/], categoryPrefixes: ['Exceptions '] },
     { id: 'concept:regex', label: 'Regex', description: 'Regular expressions and patterns', patterns: [/\bregex\b|\bregular\s+expression\b|\bre\.(?:match|search|findall|sub|split)\b|\bpattern\s+matching\b/] },
     { id: 'concept:math', label: 'Math', description: 'Arithmetic, primes, gcd, lcm', patterns: [/\barithmetic\b|\bsum\b|\baverage\b|\bsquare\b|\bcube\b|\bprime\b|\bfactorial\b|\bgcd\b|\blcm\b|\bmodulo\b|\bremainder\b|\bpercentage\b|\bbmi\b|\bnumber\b|\bnumbers\b/] },
     { id: 'concept:slicing', label: 'Slicing', description: 'Sequence ranges with start, stop, and step', patterns: [/\bslicing\b|\bslice\b|\bstart\s*:\s*stop(?:\s*:\s*step)?\b|\[[^\]\n]*:[^\]\n]*\]/] },
@@ -5273,7 +5274,9 @@ const getModeLabel = (mode: ProblemMode, lang: 'en' | 'fr' = 'en') => {
 
 const getExerciseDescription = (exercise: Exercise, lang: 'en' | 'fr') => {
     let description: string;
-    if (lang === 'fr' && CORE_CONCEPT_EXPANSION_FR[exercise.id]) {
+    if (lang === 'fr' && SUPPLEMENTAL_CONCEPT_FR[exercise.id]) {
+        description = SUPPLEMENTAL_CONCEPT_FR[exercise.id].description;
+    } else if (lang === 'fr' && CORE_CONCEPT_EXPANSION_FR[exercise.id]) {
         description = CORE_CONCEPT_EXPANSION_FR[exercise.id].description;
     } else if (lang === 'fr' && CONCEPT_LEVEL_EXPANSION_FR[exercise.id]) {
         description = CONCEPT_LEVEL_EXPANSION_FR[exercise.id].description;
@@ -16810,13 +16813,13 @@ const WorkspaceApp: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v314') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v315') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v314')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v315')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -17385,7 +17388,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         const q = lookupQuestion.toLowerCase();
         const description = getExerciseDescription(exercise, appLang);
         const generatedLocalization = appLang === 'fr'
-            ? CORE_CONCEPT_EXPANSION_FR[exercise.id] ?? CONCEPT_LEVEL_EXPANSION_FR[exercise.id] ?? EASY_CONCEPT_PRACTICE_FR[exercise.id] ?? WHILE_LOOP_PRACTICE_FR[exercise.id] ?? CONCEPT_EXPANSION_FR[exercise.id] ?? ADVANCED_CONCEPT_FR[exercise.id] ?? FOUNDATION_INTERMEDIATE_FR[exercise.id]
+            ? SUPPLEMENTAL_CONCEPT_FR[exercise.id] ?? CORE_CONCEPT_EXPANSION_FR[exercise.id] ?? CONCEPT_LEVEL_EXPANSION_FR[exercise.id] ?? EASY_CONCEPT_PRACTICE_FR[exercise.id] ?? WHILE_LOOP_PRACTICE_FR[exercise.id] ?? CONCEPT_EXPANSION_FR[exercise.id] ?? ADVANCED_CONCEPT_FR[exercise.id] ?? FOUNDATION_INTERMEDIATE_FR[exercise.id]
             : null;
         const localizedExercise = generatedLocalization
             ? { ...exercise, description, hint: generatedLocalization.hint, breakdown: generatedLocalization.breakdown }
@@ -19906,7 +19909,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                 : isSlicingPractice ? 'slicing'
                                     : 'for loops';
         const localizedGenerated = lang === 'fr'
-            ? CORE_CONCEPT_EXPANSION_FR[targetExercise.id] ?? CONCEPT_LEVEL_EXPANSION_FR[targetExercise.id] ?? EASY_CONCEPT_PRACTICE_FR[targetExercise.id] ?? WHILE_LOOP_PRACTICE_FR[targetExercise.id] ?? CONCEPT_EXPANSION_FR[targetExercise.id] ?? ADVANCED_CONCEPT_FR[targetExercise.id] ?? FOUNDATION_INTERMEDIATE_FR[targetExercise.id]
+            ? SUPPLEMENTAL_CONCEPT_FR[targetExercise.id] ?? CORE_CONCEPT_EXPANSION_FR[targetExercise.id] ?? CONCEPT_LEVEL_EXPANSION_FR[targetExercise.id] ?? EASY_CONCEPT_PRACTICE_FR[targetExercise.id] ?? WHILE_LOOP_PRACTICE_FR[targetExercise.id] ?? CONCEPT_EXPANSION_FR[targetExercise.id] ?? ADVANCED_CONCEPT_FR[targetExercise.id] ?? FOUNDATION_INTERMEDIATE_FR[targetExercise.id]
             : null;
         const breakdown = localizedGenerated?.breakdown ?? targetExercise.breakdown ?? '';
         const requiredStructure = isRegexPractice ? "Import and use Python's re module."
@@ -23337,6 +23340,7 @@ const App: React.FC = () => {
                 EASY_CONCEPT_PRACTICE_FR = catalog.easyConceptPracticeFr;
                 CONCEPT_LEVEL_EXPANSION_FR = catalog.conceptLevelExpansionFr;
                 CORE_CONCEPT_EXPANSION_FR = catalog.coreConceptExpansionFr;
+                SUPPLEMENTAL_CONCEPT_FR = catalog.supplementalConceptFr;
                 if (active) setCurriculumReady(true);
             })
             .catch(error => {

@@ -7,6 +7,7 @@ import { FOUNDATION_INTERMEDIATE_EXERCISES } from './foundationIntermediateExerc
 import { EASY_CONCEPT_PRACTICE_EXERCISES } from './easyConceptPracticeExercises';
 import { CONCEPT_LEVEL_EXPANSION_EXERCISES } from './conceptLevelExpansionExercises';
 import { CORE_CONCEPT_EXPANSION_EXERCISES } from './coreConceptExpansionExercises';
+import { SUPPLEMENTAL_CONCEPT_EXERCISES } from './supplementalConceptExercises';
 
 interface ForLoopPracticeSpec {
     id: number;
@@ -24239,5 +24240,6 @@ export const EXERCISES: Exercise[] = [
     ...FOUNDATION_INTERMEDIATE_EXERCISES,
     ...EASY_CONCEPT_PRACTICE_EXERCISES,
     ...CONCEPT_LEVEL_EXPANSION_EXERCISES,
-    ...CORE_CONCEPT_EXPANSION_EXERCISES
+    ...CORE_CONCEPT_EXPANSION_EXERCISES,
+    ...SUPPLEMENTAL_CONCEPT_EXERCISES
 ];
