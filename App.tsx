@@ -4533,7 +4533,31 @@ interface ConceptDocGuide {
     common: string[];
 }
 
-const buildConceptDoc = (title: string, description: string, guide: ConceptDocGuide) => `OVERVIEW:
+const CONCEPT_TRANSLATION_KEY_OVERRIDES: Partial<Record<ConceptModeId, string>> = {
+    'concept:for_loops': 'concept.forLoops',
+    'concept:while_loops': 'concept.whileLoops',
+    'concept:input_output': 'concept.inputOutput',
+    'concept:type_conversion': 'concept.typeConversion',
+};
+
+const getConceptTranslationKey = (modeId: ConceptModeId) => CONCEPT_TRANSLATION_KEY_OVERRIDES[modeId] ?? modeId.replace(':', '.');
+
+const getConceptTranslation = (mode: ConceptMode, suffix: '' | 'Desc', lang: 'en' | 'fr') => {
+    const key = `${getConceptTranslationKey(mode.id)}${suffix}`;
+    const translated = t(key, lang);
+    return translated !== key ? translated : (suffix === 'Desc' ? mode.description : mode.label);
+};
+
+const cleanFrenchConceptExample = (example: string) => example
+    .replace(/\s+#.*$/gm, '')
+    .trim();
+
+const buildConceptDoc = (mode: ConceptMode, guide: ConceptDocGuide, lang: 'en' | 'fr') => {
+    const title = getConceptTranslation(mode, '', lang);
+    const description = getConceptTranslation(mode, 'Desc', lang);
+
+    if (lang === 'en') {
+        return `OVERVIEW:
 ${title}
 ${description}
 ${guide.shape ? `Quick shape: ${guide.shape}` : ''}
@@ -4554,6 +4578,47 @@ ${guide.examples.map((example, index) => `Example ${index + 1}:\n${example}`).jo
 
 COMMON OPERATIONS:
 ${guide.common.join('\n')}`;
+    }
+
+    const isWhileLoop = mode.id === 'concept:while_loops';
+    const overview = isWhileLoop
+        ? 'Une boucle while répète un bloc tant que sa condition reste vraie. Elle convient lorsque le nombre de répétitions n’est pas connu à l’avance.'
+        : `${title} est une notion Python liée à l’objectif suivant : ${description}. Cette référence accompagne le problème actuel sans remplacer la recherche de la solution.`;
+    const simple = isWhileLoop
+        ? 'Python vérifie d’abord la condition. Si elle vaut True, le corps indenté s’exécute une fois, puis Python vérifie de nouveau la condition. Si elle vaut False, la boucle se termine.'
+        : `Au niveau simple, repérez les données d’entrée, appliquez ${title.toLowerCase()} à ces données, puis produisez exactement le type de résultat demandé.`;
+    const intermediate = isWhileLoop
+        ? 'Initialisez un compteur, un index, un accumulateur ou une valeur sentinelle avant la boucle. Modifiez cet état dans le corps afin que la condition finisse par devenir False. break arrête la boucle et continue passe directement au test suivant.'
+        : `Au niveau intermédiaire, suivez l’ordre d’évaluation, les valeurs intermédiaires et les changements d’état. Vérifiez si l’opération crée une nouvelle valeur ou modifie un objet existant.`;
+    const inDepth = isWhileLoop
+        ? 'Une boucle while doit respecter trois points : un état initial valide, une condition d’arrêt correcte et une progression garantie. Sans progression, elle peut devenir infinie. Avec des boucles imbriquées, la boucle interne termine ses répétitions pour chaque passage de la boucle externe.'
+        : `Au niveau approfondi, analysez le contrat complet de ${title.toLowerCase()} : types acceptés, valeur retournée, portée des variables, ordre des appels, mutations éventuelles, cas limites et erreurs possibles. Testez plusieurs entrées plutôt que de reproduire uniquement l’exemple.`;
+    const examples = guide.examples.map(cleanFrenchConceptExample);
+    const common = isWhileLoop
+        ? ['Initialiser l’état avant la boucle', 'Tester la condition avant chaque passage', 'Mettre à jour le compteur, l’index ou la sentinelle', 'Utiliser break pour quitter la boucle', 'Utiliser continue sans oublier la progression', 'Vérifier les cas zéro, vide et limite']
+        : [`Identifier l’entrée et le résultat attendu pour ${title.toLowerCase()}`, 'Respecter la syntaxe et l’indentation Python', 'Suivre les valeurs intermédiaires dans leur ordre réel', 'Vérifier le type de la valeur retournée', 'Tester une entrée normale, une entrée vide et un cas limite'];
+
+    return `VUE D’ENSEMBLE:
+${title}
+${description}
+${guide.shape ? `Forme rapide : ${guide.shape}` : ''}
+${overview}
+
+EXPLICATION SIMPLE:
+${simple}
+
+EXPLICATION INTERMÉDIAIRE:
+${intermediate}
+
+EXPLICATION APPROFONDIE:
+${inDepth}
+
+EXEMPLES:
+${examples.map((example, index) => `Exemple ${index + 1} :\n${example}`).join('\n')}
+
+OPÉRATIONS COURANTES:
+${common.join('\n')}`;
+};
 
 const CONCEPT_GUIDES: Partial<Record<ConceptModeId, ConceptDocGuide>> = {
     'concept:decorators': {
@@ -5026,25 +5091,25 @@ const CONCEPT_GUIDES: Partial<Record<ConceptModeId, ConceptDocGuide>> = {
     }
 };
 
-const CONCEPT_DOCS: Record<ConceptModeId, string> = Object.fromEntries(
-    PYTHON_CONCEPT_MODES.map(mode => [
-        mode.id,
-        buildConceptDoc(mode.label, mode.description, CONCEPT_GUIDES[mode.id] ?? {
-            simple: `${mode.label} is an important Python concept used in this group of practice problems.`,
-            intermediate: `Focus on how ${mode.label.toLowerCase()} changes the input into the required output.`,
-            inDepth: `Read the problem carefully, identify the required structure, then write code that works for different inputs instead of copying one example.`,
-            examples: ['# Write the concept in small steps', '# Test with more than one input'],
-            common: ['Read the prompt', 'Identify input and output', 'Use the required syntax', 'Return or print exactly what the problem asks for']
-        })
-    ])
-) as Record<ConceptModeId, string>;
+const getConceptDoc = (modeId: ConceptModeId, lang: 'en' | 'fr') => {
+    const mode = PYTHON_CONCEPT_MODES.find(item => item.id === modeId);
+    if (!mode) return '';
+    const guide = CONCEPT_GUIDES[mode.id] ?? {
+        simple: `${mode.label} is an important Python concept used in this group of practice problems.`,
+        intermediate: `Focus on how ${mode.label.toLowerCase()} changes the input into the required output.`,
+        inDepth: 'Read the problem carefully, identify the required structure, then write code that works for different inputs instead of copying one example.',
+        examples: ['# Write the concept in small steps', '# Test with more than one input'],
+        common: ['Read the prompt', 'Identify input and output', 'Use the required syntax', 'Return or print exactly what the problem asks for'],
+    };
+    return buildConceptDoc(mode, guide, lang);
+};
 
 const MODE_OPTIONS = [...DIFFICULTY_MODES, ...PYTHON_CONCEPT_MODES] as Array<{ id: ProblemMode; label: string; description: string }>;
 const CONCEPT_MODE_IDS = new Set<ProblemMode>(PYTHON_CONCEPT_MODES.map(mode => mode.id));
 const isConceptMode = (mode: ProblemMode): mode is ConceptModeId => CONCEPT_MODE_IDS.has(mode);
 const getModeLabel = (mode: ProblemMode, lang: 'en' | 'fr' = 'en') => {
     const fallback = MODE_OPTIONS.find(item => item.id === mode)?.label ?? 'Normal';
-    const key = isConceptMode(mode) ? mode.replace(':', '.') : `mode.${mode}`;
+    const key = isConceptMode(mode) ? getConceptTranslationKey(mode) : `mode.${mode}`;
     const translated = t(key, lang);
     return translated !== key ? translated : fallback;
 };
@@ -14024,7 +14089,7 @@ const PYTHON_BUILTINS = [
     'sum', 'super', 'tuple', 'type', 'upper', 'update', 'values', 'zip'
 ];
 
-function CopyButton({ text }: { text: string }) {
+function CopyButton({ text, lang = 'en' }: { text: string; lang?: 'en' | 'fr' }) {
     const [copied, setCopied] = useState(false);
     return (
         <button
@@ -14036,10 +14101,10 @@ function CopyButton({ text }: { text: string }) {
                 } catch { /* ignore */ }
             }}
             className="flex items-center gap-1 text-[10px] text-gray-400 hover:text-[#4ade80] transition-colors"
-            title="Copy to clipboard"
+            title={lang === 'fr' ? 'Copier dans le presse-papiers' : 'Copy to clipboard'}
         >
             {copied ? <Check size={12} className="text-[#4ade80]" /> : <Copy size={12} />}
-            {copied ? 'Copied' : 'Copy'}
+            {copied ? (lang === 'fr' ? 'Copié' : 'Copied') : (lang === 'fr' ? 'Copier' : 'Copy')}
         </button>
     );
 }
@@ -14123,6 +14188,27 @@ const cleanSyntaxLine = (line: string) => {
     return withoutComment.replace(/^"""\s*|\s*"""$/g, '').trimEnd();
 };
 
+const DOC_SECTION_ALIASES: Record<string, string> = {
+    SYNTAXE: 'SYNTAX',
+    'ORDRE D’ÉVALUATION': 'EVALUATION ORDER',
+    "ORDRE D'EVALUATION": 'EVALUATION ORDER',
+    'ORDRE D’EXÉCUTION': 'EXECUTION ORDER',
+    "ORDRE D'EXECUTION": 'EXECUTION ORDER',
+    'FLUX D’EXÉCUTION': 'EXECUTION FLOW',
+    "FLUX D'EXECUTION": 'EXECUTION FLOW',
+    'VUE D’ENSEMBLE': 'OVERVIEW',
+    "VUE D'ENSEMBLE": 'OVERVIEW',
+    'EXPLICATION SIMPLE': 'SIMPLE EXPLANATION',
+    'EXPLICATION INTERMÉDIAIRE': 'INTERMEDIATE EXPLANATION',
+    'EXPLICATION INTERMEDIAIRE': 'INTERMEDIATE EXPLANATION',
+    'EXPLICATION APPROFONDIE': 'IN-DEPTH EXPLANATION',
+    EXEMPLES: 'EXAMPLES',
+    'MÉTHODES COURANTES': 'COMMON METHODS',
+    'METHODES COURANTES': 'COMMON METHODS',
+    'OPÉRATIONS COURANTES': 'COMMON OPERATIONS',
+    'OPERATIONS COURANTES': 'COMMON OPERATIONS',
+};
+
 const parseSyntaxDocumentation = (content: string): SyntaxDocSection[] => {
     const sections: SyntaxDocSection[] = [];
     let current: SyntaxDocSection | null = null;
@@ -14135,7 +14221,8 @@ const parseSyntaxDocumentation = (content: string): SyntaxDocSection[] => {
             continue;
         }
 
-        const heading = trimmed.replace(/:$/, '').toUpperCase();
+        const rawHeading = trimmed.replace(/:$/, '').toUpperCase();
+        const heading = DOC_SECTION_ALIASES[rawHeading] ?? rawHeading;
         if (Object.prototype.hasOwnProperty.call(SYNTAX_SECTION_STYLES, heading)) {
             current = { title: heading, lines: [] };
             sections.push(current);
@@ -14217,18 +14304,21 @@ const groupDocLines = (lines: string[]): DocLineGroup[] => {
     return groups;
 };
 
-const formatDocSectionTitle = (title: string) => title
-    .replace('EVALUATION ORDER', 'Evaluation Order')
-    .replace('EXECUTION ORDER', 'Execution Order')
-    .replace('EXECUTION FLOW', 'Execution Flow')
-    .replace('SYNTAX', 'Syntax')
-    .replace('OVERVIEW', 'Overview')
-    .replace('SIMPLE EXPLANATION', 'Simple Explanation')
-    .replace('INTERMEDIATE EXPLANATION', 'Intermediate Explanation')
-    .replace('IN-DEPTH EXPLANATION', 'In-Depth Explanation')
-    .replace('EXAMPLES', 'Examples')
-    .replace('COMMON OPERATIONS', 'Common Operations')
-    .replace('COMMON METHODS', 'Common Methods');
+const DOC_SECTION_LABELS: Record<string, { en: string; fr: string }> = {
+    'EVALUATION ORDER': { en: 'Evaluation Order', fr: 'Ordre d’évaluation' },
+    'EXECUTION ORDER': { en: 'Execution Order', fr: 'Ordre d’exécution' },
+    'EXECUTION FLOW': { en: 'Execution Flow', fr: 'Flux d’exécution' },
+    SYNTAX: { en: 'Syntax', fr: 'Syntaxe' },
+    OVERVIEW: { en: 'Overview', fr: 'Vue d’ensemble' },
+    'SIMPLE EXPLANATION': { en: 'Simple Explanation', fr: 'Explication simple' },
+    'INTERMEDIATE EXPLANATION': { en: 'Intermediate Explanation', fr: 'Explication intermédiaire' },
+    'IN-DEPTH EXPLANATION': { en: 'In-Depth Explanation', fr: 'Explication approfondie' },
+    EXAMPLES: { en: 'Examples', fr: 'Exemples' },
+    'COMMON OPERATIONS': { en: 'Common Operations', fr: 'Opérations courantes' },
+    'COMMON METHODS': { en: 'Common Methods', fr: 'Méthodes courantes' },
+};
+
+const formatDocSectionTitle = (title: string, lang: 'en' | 'fr') => DOC_SECTION_LABELS[title]?.[lang] ?? title;
 
 const isDocCodeHeavySection = (title: string) => ['EXAMPLES', 'COMMON OPERATIONS', 'COMMON METHODS'].includes(title);
 
@@ -14244,7 +14334,7 @@ const buildDocCodePanelValue = (groups: DocLineGroup[], sectionTitle: string) =>
         const line = group.line.trim();
         if (!line) continue;
 
-        if (/^Example\s+\d+:/i.test(line)) {
+        if (/^(?:Example|Exemple)\s+\d+\s*:/i.test(line)) {
             lines.push(`# ${line}`, '');
             continue;
         }
@@ -14303,7 +14393,7 @@ function DocumentationCodePanel({ code, editorColors, accent }: { code: string; 
     );
 }
 
-function SyntaxDocumentationPanel({ content, editorColors, panelColors }: { content: string; editorColors: EditorColorSettings; panelColors: PanelColorSettings }) {
+function SyntaxDocumentationPanel({ content, editorColors, panelColors, lang }: { content: string; editorColors: EditorColorSettings; panelColors: PanelColorSettings; lang: 'en' | 'fr' }) {
     const sections = useMemo(() => parseSyntaxDocumentation(content), [content]);
     const sectionAccents = [
         editorColors.keyword,
@@ -14337,7 +14427,7 @@ function SyntaxDocumentationPanel({ content, editorColors, panelColors }: { cont
                         </div>
                         <div className="min-w-0 space-y-2">
                             <h3 className="text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: accent }}>
-                                {formatDocSectionTitle(section.title)}
+                                {formatDocSectionTitle(section.title, lang)}
                             </h3>
                             <div className="max-h-[68vh] space-y-2 overflow-y-auto pr-1 [-webkit-overflow-scrolling:touch]">
                                 {groups.map((group, index) => {
@@ -14353,7 +14443,7 @@ function SyntaxDocumentationPanel({ content, editorColors, panelColors }: { cont
                                         );
                                     }
 
-                                    const isExampleLabel = /^Example\s+\d+:/i.test(group.line);
+                                    const isExampleLabel = /^(?:Example|Exemple)\s+\d+\s*:/i.test(group.line);
                                     const isFlow = group.line.startsWith('→') || group.line.startsWith('def blocks') || group.line.startsWith('Execution starts');
                                     return (
                                         <div
@@ -14446,6 +14536,13 @@ const normalizeSolutionHeadings = (solution: string) => {
 const localizeSolutionCodeDisplay = (solution: string, lang: 'en' | 'fr') => {
     if (lang !== 'fr') return solution;
     return solution
+        .replace(/^# Example (\d+): Example \d+: static method approach/gm, '# Exemple $1 : approche avec méthode statique')
+        .replace(/^# Example (\d+): canonical function approach/gm, '# Exemple $1 : approche canonique avec fonction')
+        .replace(/^# Example (\d+): nested helper approach/gm, '# Exemple $1 : approche avec fonction auxiliaire imbriquée')
+        .replace(/^# Example (\d+): static method approach/gm, '# Exemple $1 : approche avec méthode statique')
+        .replace(/^# Example (\d+): assigned result approach/gm, '# Exemple $1 : approche avec résultat affecté')
+        .replace(/^# Example (\d+): direct call/gm, '# Exemple $1 : appel direct')
+        .replace(/^# Example (\d+): simple script approach/gm, '# Exemple $1 : approche avec script simple')
         .replace(/^# Using function approach/gm, '# Approche avec fonction')
         .replace(/^# Using script approach/gm, '# Approche script')
         .replace(/^# Direct approach/gm, '# Approche directe')
@@ -14460,7 +14557,8 @@ const localizeSolutionCodeDisplay = (solution: string, lang: 'en' | 'fr') => {
         .replace(/^# Step (\d+): display the final answer\./gm, '# Étape $1 : afficher la réponse finale.')
         .replace(/^# Step (\d+): store a value in a name\./gm, '# Étape $1 : stocker une valeur dans un nom.')
         .replace(/^# Step (\d+): check the condition before printing\./gm, '# Étape $1 : vérifier la condition avant d’afficher.')
-        .replace(/^# Step (\d+): run this Python statement\./gm, '# Étape $1 : exécuter cette instruction Python.');
+        .replace(/^# Step (\d+): run this Python statement\./gm, '# Étape $1 : exécuter cette instruction Python.')
+        .replace(/# Expected:/g, '# Résultat attendu :');
 };
 
 const localizeSolutionDocText = (content: string, lang: 'en' | 'fr') => {
@@ -14521,7 +14619,35 @@ const localizeSolutionDocText = (content: string, lang: 'en' | 'fr') => {
         .replace(/Execution starts when the function is called/g, 'L’exécution commence quand la fonction est appelée')
         .replace(/Loop: takes one item from the iterable, runs body, repeats until done/g, 'Boucle : prend un élément de l’itérable, exécute le corps, répète jusqu’à la fin')
         .replace(/Branch: if a condition exists, it picks which block runs/g, 'Branchement : si une condition existe, elle choisit quel bloc s’exécute')
-        .replace(/Regex flow: pattern -> match\/replace\/split\/validate -> result/g, 'Flux regex : motif -> trouver/remplacer/découper/valider -> résultat');
+        .replace(/Regex flow: pattern -> match\/replace\/split\/validate -> result/g, 'Flux regex : motif -> trouver/remplacer/découper/valider -> résultat')
+        .replace(/A while loop checks its condition before every iteration\./g, 'Une boucle while vérifie sa condition avant chaque itération.')
+        .replace(/initialize the counter, index, accumulator, or sentinel/g, 'initialiser le compteur, l’index, l’accumulateur ou la sentinelle')
+        .replace(/perform one step/g, 'effectuer une étape')
+        .replace(/update state so the loop can terminate/g, 'mettre à jour l’état afin que la boucle puisse se terminer')
+        .replace(/WHILE LOOP PARTS/g, 'PARTIES D’UNE BOUCLE WHILE')
+        .replace(/Initialization creates the starting state\./g, 'L’initialisation crée l’état de départ.')
+        .replace(/Condition is evaluated as True or False before the body\./g, 'La condition est évaluée comme True ou False avant le corps.')
+        .replace(/Body performs one iteration only when the condition is True\./g, 'Le corps effectue une itération uniquement lorsque la condition vaut True.')
+        .replace(/Update changes the state and moves toward termination\./g, 'La mise à jour modifie l’état et progresse vers l’arrêt.')
+        .replace(/Exit occurs when the condition becomes False or break runs\./g, 'La sortie se produit lorsque la condition devient False ou lorsque break s’exécute.')
+        .replace(/Python evaluates the condition first\. If True, it executes the indented/g, 'Python évalue d’abord la condition. Si elle vaut True, il exécute le corps indenté')
+        .replace(/body from top to bottom, applies the state update, then checks the condition again\./g, 'de haut en bas, applique la mise à jour de l’état, puis vérifie de nouveau la condition.')
+        .replace(/Boolean operators short-circuit from left to right\./g, 'Les opérateurs booléens utilisent le court-circuit de gauche à droite.')
+        .replace(/function object is created; body is not run yet/g, 'l’objet fonction est créé ; son corps ne s’exécute pas encore')
+        .replace(/arguments are evaluated, then parameters are bound/g, 'les arguments sont évalués, puis les paramètres reçoivent leurs valeurs')
+        .replace(/initialize state -> test condition -> run body -> update state -> repeat test/g, 'initialiser l’état -> tester la condition -> exécuter le corps -> mettre à jour l’état -> recommencer le test')
+        .replace(/A return exits the function immediately\./g, 'return quitte immédiatement la fonction.')
+        .replace(/A break exits only the nearest loop\./g, 'break quitte uniquement la boucle la plus proche.')
+        .replace(/A continue jumps to the next condition check, so required updates must not be skipped\./g, 'continue passe au prochain test de la condition ; les mises à jour indispensables ne doivent donc pas être oubliées.')
+        .replace(/Nested while loops complete their inner repetitions for each outer iteration\./g, 'Les boucles while imbriquées terminent les répétitions internes pour chaque itération externe.')
+        .replace(/REQUIRED STRUCTURE/g, 'STRUCTURE OBLIGATOIRE')
+        .replace(/CORE MEANING/g, 'PRINCIPE ESSENTIEL')
+        .replace(/Python evaluates the arguments at the call site\./g, 'Python évalue les arguments à l’endroit de l’appel.')
+        .replace(/Parameters are bound to those argument values\./g, 'Les paramètres reçoivent ensuite les valeurs de ces arguments.')
+        .replace(/Expressions inside the function are evaluated from their innermost parts outward\./g, 'Les expressions de la fonction sont évaluées des parties les plus internes vers les parties externes.')
+        .replace(/The required (.+?) structure controls how values are produced or selected\./g, 'La structure $1 demandée contrôle la production ou la sélection des valeurs.')
+        .replace(/return evaluates the final expression and sends that value to the caller\./g, 'return évalue l’expression finale et renvoie cette valeur à l’appelant.')
+        .replace(/function call -> bind inputs -> apply (.+?) logic -> build result -> return/g, 'appel de fonction -> lier les entrées -> appliquer la logique $1 -> construire le résultat -> return');
 };
 
 const getInlinePythonTokenColor = (token: string, editorColors: EditorColorSettings) => {
@@ -15527,8 +15653,16 @@ const WorkspaceApp: React.FC = () => {
         .sort(([, left], [, right]) => right.lastSeen - left.lastSeen)[0] || null, [generalAiMastery]);
     const [appLang, setAppLang] = useState<'en' | 'fr'>(() => getLanguage());
     const changeLang = useCallback((newLang: 'en' | 'fr') => {
+        const previousScaffold = getExerciseEditorCode(exercise, codeScaffoldEnabled, AUTO_GRADERS[exercise.id], appLang).trimEnd();
+        const nextScaffold = getExerciseEditorCode(exercise, codeScaffoldEnabled, AUTO_GRADERS[exercise.id], newLang);
         setLanguage(newLang);
         setAppLang(newLang);
+        setFiles(current => {
+            if (current.length !== 1 || current[0].name !== 'main.py') return current;
+            const currentCode = current[0].content.trimEnd();
+            if (currentCode !== previousScaffold && currentCode !== exercise.initialCode.trimEnd()) return current;
+            return [{ name: 'main.py', content: nextScaffold }];
+        });
         setProblemAiMessages([]);
         setGeneralAiMessages([]);
         setGeneralAiActiveQuiz(null);
@@ -15537,7 +15671,7 @@ const WorkspaceApp: React.FC = () => {
         setAiHintText('');
         setOutput(t('output.runPrompt', newLang));
         setOutputStatus('idle');
-    }, []);
+    }, [appLang, codeScaffoldEnabled, exercise]);
     useEffect(() => {
         if (!generalAiRunning) { setGeneralAiProgress(0); return; }
         setGeneralAiProgress(5);
@@ -15890,8 +16024,8 @@ const WorkspaceApp: React.FC = () => {
     const selectedConceptMode = getConceptForMode(difficultyMode);
     const conceptDocContent = useMemo(() => {
         if (!isConceptMode(difficultyMode)) return '';
-        return CONCEPT_DOCS[difficultyMode] ?? '';
-    }, [difficultyMode]);
+        return getConceptDoc(difficultyMode, appLang);
+    }, [appLang, difficultyMode]);
 
     useEffect(() => {
         localStorage.setItem('python_count_row_colors', JSON.stringify(countRowColors));
@@ -16515,13 +16649,13 @@ const WorkspaceApp: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v311') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v312') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v311')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v312')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -20754,7 +20888,7 @@ print(result)
                                         <TabButton active={solutionTab === 'requirements'} onClick={() => setSolutionTab('requirements')} label={t('solution.requirements', appLang)} />
                                         <TabButton active={solutionTab === 'syntax'} onClick={() => setSolutionTab('syntax')} label={t('solution.syntax', appLang)} />
                                         {isConceptMode(difficultyMode) && selectedConceptMode && (
-                                            <TabButton active={solutionTab === 'concept'} onClick={() => setSolutionTab('concept')} label={selectedConceptMode.label} />
+                                            <TabButton active={solutionTab === 'concept'} onClick={() => setSolutionTab('concept')} label={getModeLabel(selectedConceptMode.id, appLang)} />
                                         )}
                                     </div>
                                 </div>
@@ -20762,7 +20896,7 @@ print(result)
                                     {solutionTab === 'code' && (
                                         <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full flex flex-col">
                                             <div className="flex justify-end items-center px-3 py-1.5 border-b border-[#1d2d44]">
-                                                <CopyButton text={displaySolution} />
+                                                <CopyButton text={displaySolution} lang={appLang} />
                                             </div>
                                             <div className="flex-1 overflow-auto">
                                                 <CodeMirror value={displaySolution} height="100%" readOnly={true} extensions={[python(), EditorView.lineWrapping, ...createCustomPythonTheme(editorColors)]} />
@@ -20772,7 +20906,7 @@ print(result)
                                     {solutionTab === 'logic' && (
                                         <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full flex flex-col">
                                             <div className="flex justify-end items-center px-3 py-1.5 border-b border-[#1d2d44]">
-                                                <CopyButton text={logicContent || ''} />
+                                                <CopyButton text={logicContent || ''} lang={appLang} />
                                             </div>
                                             <div className="flex-1 overflow-auto">
                                                 {logicContent ? (
@@ -20788,7 +20922,7 @@ print(result)
                                     {solutionTab === 'requirements' && (
                                         <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full flex flex-col">
                                             <div className="flex justify-end items-center px-3 py-1.5 border-b border-[#1d2d44]">
-                                                <CopyButton text={requirementsContent || ''} />
+                                                <CopyButton text={requirementsContent || ''} lang={appLang} />
                                             </div>
                                             <div className="flex-1 overflow-auto">
                                                 {requirementsContent ? (
@@ -20804,11 +20938,11 @@ print(result)
                                     {solutionTab === 'syntax' && (
                                         <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full flex flex-col">
                                             <div className="flex justify-end items-center px-3 py-1.5 border-b border-[#1d2d44]">
-                                                <CopyButton text={syntaxContent || ''} />
+                                                <CopyButton text={syntaxContent || ''} lang={appLang} />
                                             </div>
                                             <div className="flex-1 overflow-auto">
                                                 {syntaxContent ? (
-                                                    <SyntaxDocumentationPanel content={syntaxContent} editorColors={editorColors} panelColors={panelColors} />
+                                                    <SyntaxDocumentationPanel content={syntaxContent} editorColors={editorColors} panelColors={panelColors} lang={appLang} />
                                                 ) : (
                                                     <div className="p-8 text-center text-gray-500 text-sm">
                                                         {t('solution.searchingSyntax', appLang)}
@@ -20820,11 +20954,11 @@ print(result)
                                     {solutionTab === 'concept' && (
                                         <div className="bg-[#050c18] rounded-xl overflow-hidden border border-[#1d2d44] h-full flex flex-col">
                                             <div className="flex justify-end items-center px-3 py-1.5 border-b border-[#1d2d44]">
-                                                <CopyButton text={conceptDocContent || ''} />
+                                                <CopyButton text={conceptDocContent || ''} lang={appLang} />
                                             </div>
                                             <div className="flex-1 overflow-auto">
                                                 {conceptDocContent ? (
-                                                    <SyntaxDocumentationPanel content={conceptDocContent} editorColors={editorColors} panelColors={panelColors} />
+                                                    <SyntaxDocumentationPanel content={conceptDocContent} editorColors={editorColors} panelColors={panelColors} lang={appLang} />
                                                 ) : (
                                                     <div className="p-8 text-center text-gray-500 text-sm">
                                                         {t('solution.noDoc', appLang)}
@@ -21972,7 +22106,7 @@ print(result)
                                                     const isSelected = difficultyMode === concept.id;
                                                     const count = getExercisePoolForMode(concept.id).length;
                                                     const translatedLabel = getModeLabel(concept.id, appLang);
-                                                    const descriptionKey = `${concept.id.replace(':', '.')}Desc`;
+                                                    const descriptionKey = `${getConceptTranslationKey(concept.id)}Desc`;
                                                     const translatedDescription = t(descriptionKey, appLang);
                                                     return (
                                                         <button
