@@ -104,6 +104,7 @@ let ADVANCED_CONCEPT_FR: Record<number, GeneratedFrenchExercise> = {};
 let FOUNDATION_INTERMEDIATE_FR: Record<number, GeneratedFrenchExercise> = {};
 let EASY_CONCEPT_PRACTICE_FR: Record<number, GeneratedFrenchExercise> = {};
 let CONCEPT_LEVEL_EXPANSION_FR: Record<number, GeneratedFrenchExercise> = {};
+let CORE_CONCEPT_EXPANSION_FR: Record<number, GeneratedFrenchExercise> = {};
 
 interface ProblemAiMessage {
     id: number;
@@ -4522,6 +4523,16 @@ const PYTHON_CONCEPT_MODES: ConceptMode[] = [
     { id: 'concept:earlyExit', label: 'Early Exit', description: 'break, continue, and early return', patterns: [/\bearly exit\b/], categoryPrefixes: ['Early Exit '] },
     { id: 'concept:multipleReturns', label: 'Multiple Return Values', description: 'Returning and unpacking related results', patterns: [/\bmultiple return value\b/], categoryPrefixes: ['Multiple Return Value '] },
     { id: 'concept:dataCleaning', label: 'Data Cleaning', description: 'Normalize, trim, validate, and deduplicate data', patterns: [/\bdata cleaning\b/], categoryPrefixes: ['Data Cleaning '] },
+    { id: 'concept:noneTruthiness', label: 'None & Truthiness', description: 'None, falsy values, defaults, and truth-value testing', patterns: [/\bnone\b|\btruthy\b|\bfalsy\b|\btruthiness\b/], categoryPrefixes: ['None & Truthiness '] },
+    { id: 'concept:equalityIdentity', label: 'Equality & Identity', description: '==, !=, is, is not, and normalized comparisons', patterns: [/\bequality\b|\bidentity\b|\bis not\b|\bsame value\b/], categoryPrefixes: ['Equality & Identity '] },
+    { id: 'concept:stringFormatting', label: 'String Formatting', description: 'f-strings, alignment, precision, signs, and field widths', patterns: [/\bstring formatting\b|\bf-string\b|\bformat specification\b/], categoryPrefixes: ['String Formatting '] },
+    { id: 'concept:numbersPrecision', label: 'Numbers & Precision', description: 'Rounding, division, tolerances, Decimal, and percentages', patterns: [/\bnumeric precision\b|\bdecimal places\b|\brounding\b|\bweighted average\b/], categoryPrefixes: ['Numbers & Precision '] },
+    { id: 'concept:mutabilityCopying', label: 'Mutability & Copying', description: 'Aliases, shallow copies, deep copies, and in-place changes', patterns: [/\bmutability\b|\bshallow cop(?:y|ies)\b|\bdeep cop(?:y|ies)\b|\baliasing\b/], categoryPrefixes: ['Mutability & Copying '] },
+    { id: 'concept:stacksQueues', label: 'Stacks & Queues', description: 'LIFO stacks, FIFO queues, deque, push, and pop', patterns: [/\bstack\b|\bqueue\b|\blifo\b|\bfifo\b|\bdeque\b/], categoryPrefixes: ['Stacks & Queues '] },
+    { id: 'concept:collectionsModule', label: 'Collections Module', description: 'Counter, defaultdict, deque, and namedtuple', patterns: [/\bcollections module\b|\bCounter\b|\bdefaultdict\b|\bnamedtuple\b/], categoryPrefixes: ['Collections Module '] },
+    { id: 'concept:pathsDirectories', label: 'Paths & Directories', description: 'pathlib, names, suffixes, parents, and portable path operations', patterns: [/\bpathlib\b|\bpath suffix\b|\bparent director(?:y|ies)\b/], categoryPrefixes: ['Paths & Directories '] },
+    { id: 'concept:csvJson', label: 'CSV & JSON', description: 'Parsing, selecting, converting, and serializing structured data', patterns: [/\bcsv\b|\bjson\b|\bserialization\b/], categoryPrefixes: ['CSV & JSON '] },
+    { id: 'concept:algorithmsComplexity', label: 'Algorithms & Complexity', description: 'Searching, sorting, invariants, and basic Big O reasoning', patterns: [/\bbinary search\b|\blinear search\b|\bcomplexity\b|\bbig o\b|\bselection sort\b|\bbubble sort\b/], categoryPrefixes: ['Algorithms & Complexity '] },
 ].sort((a, b) => a.label.localeCompare(b.label)) as ConceptMode[];
 
 interface ConceptDocGuide {
@@ -4532,6 +4543,11 @@ interface ConceptDocGuide {
     inDepth: string;
     examples: string[];
     common: string[];
+    overviewFr?: string;
+    simpleFr?: string;
+    intermediateFr?: string;
+    inDepthFr?: string;
+    commonFr?: string[];
 }
 
 const CONCEPT_TRANSLATION_KEY_OVERRIDES: Partial<Record<ConceptModeId, string>> = {
@@ -4582,22 +4598,22 @@ ${guide.common.join('\n')}`;
     }
 
     const isWhileLoop = mode.id === 'concept:while_loops';
-    const overview = isWhileLoop
+    const overview = guide.overviewFr ?? (isWhileLoop
         ? 'Une boucle while répète un bloc tant que sa condition reste vraie. Elle convient lorsque le nombre de répétitions n’est pas connu à l’avance.'
-        : `${title} est une notion Python liée à l’objectif suivant : ${description}. Cette référence accompagne le problème actuel sans remplacer la recherche de la solution.`;
-    const simple = isWhileLoop
+        : `${title} est une notion Python liée à l’objectif suivant : ${description}. Cette référence accompagne le problème actuel sans remplacer la recherche de la solution.`);
+    const simple = guide.simpleFr ?? (isWhileLoop
         ? 'Python vérifie d’abord la condition. Si elle vaut True, le corps indenté s’exécute une fois, puis Python vérifie de nouveau la condition. Si elle vaut False, la boucle se termine.'
-        : `Au niveau simple, repérez les données d’entrée, appliquez ${title.toLowerCase()} à ces données, puis produisez exactement le type de résultat demandé.`;
-    const intermediate = isWhileLoop
+        : `Au niveau simple, repérez les données d’entrée, appliquez ${title.toLowerCase()} à ces données, puis produisez exactement le type de résultat demandé.`);
+    const intermediate = guide.intermediateFr ?? (isWhileLoop
         ? 'Initialisez un compteur, un index, un accumulateur ou une valeur sentinelle avant la boucle. Modifiez cet état dans le corps afin que la condition finisse par devenir False. break arrête la boucle et continue passe directement au test suivant.'
-        : `Au niveau intermédiaire, suivez l’ordre d’évaluation, les valeurs intermédiaires et les changements d’état. Vérifiez si l’opération crée une nouvelle valeur ou modifie un objet existant.`;
-    const inDepth = isWhileLoop
+        : `Au niveau intermédiaire, suivez l’ordre d’évaluation, les valeurs intermédiaires et les changements d’état. Vérifiez si l’opération crée une nouvelle valeur ou modifie un objet existant.`);
+    const inDepth = guide.inDepthFr ?? (isWhileLoop
         ? 'Une boucle while doit respecter trois points : un état initial valide, une condition d’arrêt correcte et une progression garantie. Sans progression, elle peut devenir infinie. Avec des boucles imbriquées, la boucle interne termine ses répétitions pour chaque passage de la boucle externe.'
-        : `Au niveau approfondi, analysez le contrat complet de ${title.toLowerCase()} : types acceptés, valeur retournée, portée des variables, ordre des appels, mutations éventuelles, cas limites et erreurs possibles. Testez plusieurs entrées plutôt que de reproduire uniquement l’exemple.`;
+        : `Au niveau approfondi, analysez le contrat complet de ${title.toLowerCase()} : types acceptés, valeur retournée, portée des variables, ordre des appels, mutations éventuelles, cas limites et erreurs possibles. Testez plusieurs entrées plutôt que de reproduire uniquement l’exemple.`);
     const examples = guide.examples.map(cleanFrenchConceptExample);
-    const common = isWhileLoop
+    const common = guide.commonFr ?? (isWhileLoop
         ? ['Initialiser l’état avant la boucle', 'Tester la condition avant chaque passage', 'Mettre à jour le compteur, l’index ou la sentinelle', 'Utiliser break pour quitter la boucle', 'Utiliser continue sans oublier la progression', 'Vérifier les cas zéro, vide et limite']
-        : [`Identifier l’entrée et le résultat attendu pour ${title.toLowerCase()}`, 'Respecter la syntaxe et l’indentation Python', 'Suivre les valeurs intermédiaires dans leur ordre réel', 'Vérifier le type de la valeur retournée', 'Tester une entrée normale, une entrée vide et un cas limite'];
+        : [`Identifier l’entrée et le résultat attendu pour ${title.toLowerCase()}`, 'Respecter la syntaxe et l’indentation Python', 'Suivre les valeurs intermédiaires dans leur ordre réel', 'Vérifier le type de la valeur retournée', 'Tester une entrée normale, une entrée vide et un cas limite']);
 
     return `VUE D’ENSEMBLE:
 ${title}
@@ -5082,6 +5098,146 @@ const CONCEPT_GUIDES: Partial<Record<ConceptModeId, ConceptDocGuide>> = {
         examples: ['count = 0', 'total += number', 'name = "Ada"', 'result = calculate(value)'],
         common: ['name = value', 'update with +=, -=, *=', 'local variables inside functions', 'global variables outside functions', 'clear descriptive names']
     },
+    'concept:noneTruthiness': {
+        shape: 'value is None; bool(value)',
+        overview: 'None represents the absence of a value. Truthiness is Python’s rule for interpreting any object as True or False in a condition.',
+        simple: 'Use is None when you specifically mean “no value.” Empty strings, zero, False, and empty collections are falsy but are not None.',
+        intermediate: 'Use a conditional expression for defaults, but preserve valid falsy data when only None should trigger the fallback. and and or return operands, not necessarily Boolean values.',
+        inDepth: 'Python calls bool(value), which normally uses value.__bool__() or value.__len__(). Identity checks against None avoid overloaded equality. Distinguishing absence from empty or zero prevents silent data loss.',
+        examples: ['result = fallback if value is None else value', 'if items:\n    print("not empty")', 'first = next((item for item in values if item), default)'],
+        common: ['value is None', 'value is not None', 'bool(value)', 'if value:', 'fallback if value is None else value'],
+        overviewFr: 'None représente l’absence de valeur. La vérité décrit comment Python interprète chaque objet comme True ou False dans une condition.',
+        simpleFr: 'Utilisez is None pour viser précisément une valeur absente. Une chaîne vide, zéro, False et une collection vide sont faux, mais ne valent pas None.',
+        intermediateFr: 'Préservez les valeurs fausses valides lorsque seul None doit déclencher une valeur par défaut. and et or retournent des opérandes, pas forcément des booléens.',
+        inDepthFr: 'Python utilise bool(value), puis généralement __bool__() ou __len__(). Le test d’identité avec None évite une égalité surchargée et distingue correctement absence, vide et zéro.',
+        commonFr: ['value is None', 'value is not None', 'bool(value)', 'if value:', 'fallback if value is None else value']
+    },
+    'concept:equalityIdentity': {
+        shape: 'left == right; left is right',
+        overview: 'Equality compares values. Identity asks whether two names refer to the exact same object.',
+        simple: 'Use == for equal contents and is for None, True, or False identity checks. Do not use is to compare ordinary numbers or strings.',
+        intermediate: 'Normalize text or collections before comparison when the task ignores case, whitespace, or order. Check types when 1 and True must be treated differently.',
+        inDepth: '== dispatches to equality methods and can be customized by classes. is cannot be overloaded and compares object identity. Container equality recursively compares corresponding contents.',
+        examples: ['name.strip().casefold() == expected.casefold()', 'value is None', 'type(left) is type(right) and left == right'],
+        common: ['== and != compare values', 'is and is not compare identity', 'normalize before comparing', 'compare types when required', 'avoid is for string equality'],
+        overviewFr: 'L’égalité compare les valeurs. L’identité vérifie si deux noms désignent exactement le même objet.',
+        simpleFr: 'Utilisez == pour comparer le contenu et is principalement avec None, True ou False. N’utilisez pas is pour comparer des chaînes ordinaires.',
+        intermediateFr: 'Normalisez le texte ou les collections si la casse, les espaces ou l’ordre doivent être ignorés. Vérifiez le type si 1 et True doivent rester différents.',
+        inDepthFr: '== appelle les méthodes d’égalité et peut être personnalisé. is ne peut pas être surchargé et compare l’identité réelle des objets.',
+        commonFr: ['== et != comparent les valeurs', 'is et is not comparent l’identité', 'normaliser avant de comparer', 'vérifier le type si nécessaire', 'éviter is pour les chaînes']
+    },
+    'concept:stringFormatting': {
+        shape: 'f"{value:format_spec}"',
+        overview: 'String formatting converts values into controlled, readable text without changing the underlying values.',
+        simple: 'Place expressions inside braces in an f-string. Add a format specification after a colon for width, alignment, signs, padding, or decimal precision.',
+        intermediate: 'Use .2f for two decimals, >10 for right alignment, 05d for zero-padded integers, , for thousands separators, and .1% for percentages.',
+        inDepth: 'A format field contains an expression, optional conversion, and optional format specification. Width is a minimum, precision depends on the value type, and alignment may use a custom fill character.',
+        examples: ['f"Hello, {name}!"', 'f"{price:.2f}"', 'f"{number:05d}"', 'f"{ratio:.1%}"', 'f"{text:.^12}"'],
+        common: ['f"{expression}"', '.2f decimal precision', '>10 right alignment', '05d zero padding', ', thousands separator', '% percentage formatting'],
+        overviewFr: 'Le formatage transforme des valeurs en texte lisible et contrôlé sans modifier les valeurs d’origine.',
+        simpleFr: 'Placez les expressions entre accolades dans une f-string. Ajoutez une spécification après : pour la largeur, l’alignement, le signe, le remplissage ou la précision.',
+        intermediateFr: 'Utilisez .2f pour deux décimales, >10 pour aligner à droite, 05d pour les zéros, , pour les milliers et .1% pour un pourcentage.',
+        inDepthFr: 'Un champ contient une expression, une conversion facultative et une spécification facultative. La largeur est minimale et la précision dépend du type de valeur.',
+        commonFr: ['f"{expression}"', '.2f pour la précision', '>10 pour aligner à droite', '05d pour les zéros', ', pour les milliers', '% pour un pourcentage']
+    },
+    'concept:numbersPrecision': {
+        shape: 'round(value, digits); Decimal("0.1")',
+        overview: 'Numeric precision covers division, rounding, floating-point limitations, tolerances, percentages, and exact decimal arithmetic.',
+        simple: 'Use / for true division, // for floor division, % for a remainder, and round(value, digits) when the result needs a requested precision.',
+        intermediate: 'Binary floats cannot represent every decimal exactly. Compare calculated floats with a tolerance and use Decimal created from strings for exact base-10 arithmetic.',
+        inDepth: 'Rounding display and rounding stored values are separate decisions. Decimal precision follows its context. Weighted averages divide the weighted sum by total weight and must handle zero weight.',
+        examples: ['quotient, remainder = divmod(number, divisor)', 'round(part / whole * 100, 2)', 'abs(left - right) <= 1e-9', 'Decimal("0.1") + Decimal("0.2")'],
+        common: ['/, //, %, divmod()', 'round(value, digits)', 'guard zero divisors', 'compare with a tolerance', 'Decimal from strings'],
+        overviewFr: 'La précision numérique couvre la division, les arrondis, les limites des flottants, les tolérances, les pourcentages et les décimaux exacts.',
+        simpleFr: 'Utilisez / pour la division réelle, // pour la division entière, % pour le reste et round(value, digits) pour une précision demandée.',
+        intermediateFr: 'Les flottants binaires ne représentent pas tous les décimaux exactement. Comparez avec une tolérance et créez Decimal à partir de chaînes.',
+        inDepthFr: 'L’arrondi d’affichage et l’arrondi de la valeur sont deux décisions différentes. Une moyenne pondérée divise la somme pondérée par le poids total et doit gérer un poids nul.',
+        commonFr: ['/, //, %, divmod()', 'round(value, digits)', 'protéger la division par zéro', 'comparer avec une tolérance', 'créer Decimal depuis une chaîne']
+    },
+    'concept:mutabilityCopying': {
+        shape: 'copy = original.copy(); deep = deepcopy(original)',
+        overview: 'Mutable objects can change in place. Assignment creates another reference, while copying creates a separate container.',
+        simple: 'Lists and dictionaries are mutable. Strings and tuples are immutable. Use .copy() when a task must not change the caller’s top-level container.',
+        intermediate: 'A shallow copy separates the outer container but shares nested objects. deepcopy recursively copies nested mutable values. Methods such as append, update, and sort mutate in place.',
+        inDepth: 'Python names bind to objects, not boxes containing independent values. Aliases observe the same mutation. Copy only when ownership or isolation requires it, because deep copying has time and memory costs.',
+        examples: ['result = values.copy()\nresult.append(item)', 'alias = values  # same list', 'from copy import deepcopy\nresult = deepcopy(data)'],
+        common: ['assignment creates an alias', 'list.copy() and dict.copy()', 'slicing makes a shallow list copy', 'deepcopy() for nested isolation', 'mutating methods usually return None'],
+        overviewFr: 'Les objets mutables peuvent changer sur place. Une affectation crée une autre référence, tandis qu’une copie crée un conteneur distinct.',
+        simpleFr: 'Les listes et dictionnaires sont mutables. Les chaînes et tuples sont immuables. Utilisez .copy() pour protéger le conteneur fourni par l’appelant.',
+        intermediateFr: 'Une copie superficielle sépare le conteneur externe mais partage les objets imbriqués. deepcopy copie récursivement les valeurs mutables.',
+        inDepthFr: 'Les noms Python désignent des objets. Deux alias observent la même mutation. Copiez seulement lorsque l’isolation est nécessaire, car une copie profonde a un coût.',
+        commonFr: ['une affectation crée un alias', 'list.copy() et dict.copy()', 'une tranche copie superficiellement une liste', 'deepcopy() pour les structures imbriquées', 'les méthodes mutantes retournent souvent None']
+    },
+    'concept:stacksQueues': {
+        shape: 'stack.append(x); stack.pop(); queue.popleft()',
+        overview: 'A stack removes the newest item first (LIFO). A queue removes the oldest item first (FIFO).',
+        simple: 'Use list append and pop for a stack. Use collections.deque with append and popleft for an efficient queue.',
+        intermediate: 'Stacks support undo, matching brackets, and depth-first work. Queues support scheduling, breadth-first work, and first-come-first-served processing.',
+        inDepth: 'List pop() from the end is efficient, but removing index 0 shifts every remaining item. deque provides efficient operations at both ends and bounded windows with maxlen.',
+        examples: ['stack.append(item)\nlast = stack.pop()', 'from collections import deque\nqueue = deque(items)\nfirst = queue.popleft()', 'queue.rotate(1)'],
+        common: ['LIFO stack', 'FIFO queue', 'append() pushes or enqueues', 'pop() removes stack top', 'popleft() dequeues', 'check emptiness before removal'],
+        overviewFr: 'Une pile retire d’abord le dernier élément ajouté (LIFO). Une file retire d’abord le plus ancien (FIFO).',
+        simpleFr: 'Utilisez append et pop sur une liste pour une pile. Utilisez collections.deque avec append et popleft pour une file efficace.',
+        intermediateFr: 'Les piles servent aux annulations et parenthèses. Les files servent à la planification et au traitement dans l’ordre d’arrivée.',
+        inDepthFr: 'pop() à la fin d’une liste est efficace, mais retirer l’indice 0 décale les éléments. deque est efficace aux deux extrémités et accepte maxlen.',
+        commonFr: ['pile LIFO', 'file FIFO', 'append() ajoute', 'pop() retire le sommet', 'popleft() retire le premier', 'vérifier le vide avant de retirer']
+    },
+    'concept:collectionsModule': {
+        shape: 'from collections import Counter, defaultdict, deque, namedtuple',
+        overview: 'collections provides specialized containers for counting, grouping, double-ended queues, and lightweight named records.',
+        simple: 'Counter counts hashable values. defaultdict creates missing values automatically. deque works efficiently at both ends. namedtuple gives tuple fields names.',
+        intermediate: 'Convert specialized containers to dict or list when a plain serializable result is required. Choose a default factory that creates a fresh value for every key.',
+        inDepth: 'Counter supports arithmetic and zero counts, defaultdict calls its factory only for missing-key access, deque can be bounded, and namedtuple remains immutable and tuple-compatible.',
+        examples: ['counts = Counter(words)', 'groups = defaultdict(list)\ngroups[key].append(value)', 'window = deque(values, maxlen=3)', 'Point = namedtuple("Point", "x y")'],
+        common: ['Counter(values)', 'Counter.most_common()', 'defaultdict(list)', 'deque.popleft()', 'deque.rotate()', 'namedtuple fields and _asdict()'],
+        overviewFr: 'collections fournit des conteneurs spécialisés pour compter, regrouper, gérer les deux extrémités et créer des enregistrements nommés.',
+        simpleFr: 'Counter compte les valeurs. defaultdict crée les valeurs manquantes. deque est efficace aux deux extrémités. namedtuple nomme les champs d’un tuple.',
+        intermediateFr: 'Convertissez en dict ou list si un résultat simple est demandé. La factory de defaultdict doit créer une nouvelle valeur pour chaque clé.',
+        inDepthFr: 'Counter permet des opérations arithmétiques, defaultdict appelle sa factory pour une clé absente, deque peut être limitée et namedtuple reste immuable.',
+        commonFr: ['Counter(values)', 'Counter.most_common()', 'defaultdict(list)', 'deque.popleft()', 'deque.rotate()', 'champs namedtuple et _asdict()']
+    },
+    'concept:pathsDirectories': {
+        shape: 'path = pathlib.Path(text)',
+        overview: 'Path objects represent filesystem paths and provide portable operations for names, suffixes, parents, joins, and relative paths.',
+        simple: 'Use .name for the final component, .stem without the final suffix, .suffix for the extension, and .parent for the containing path.',
+        intermediate: 'Join paths with /. Use with_suffix() instead of manual string replacement. PurePath manipulates path syntax without accessing the filesystem.',
+        inDepth: 'Path resolves platform-specific behavior; PurePosixPath and PureWindowsPath model a chosen syntax. relative_to requires a compatible base. suffixes preserves multiple extensions such as .tar.gz.',
+        examples: ['path = PurePosixPath("docs/file.txt")', 'path.name  # file.txt', 'path.stem  # file', 'path.parent / "other.py"', 'path.with_suffix(".csv")'],
+        common: ['name, stem, suffix, suffixes', 'parent and parents', 'parts', 'join with /', 'with_suffix()', 'relative_to()'],
+        overviewFr: 'Les objets Path représentent des chemins et fournissent des opérations portables sur les noms, suffixes, parents, jointures et chemins relatifs.',
+        simpleFr: 'Utilisez .name pour le dernier composant, .stem sans le dernier suffixe, .suffix pour l’extension et .parent pour le dossier contenant.',
+        intermediateFr: 'Joignez les chemins avec /. Utilisez with_suffix() plutôt qu’un remplacement manuel. PurePath manipule la syntaxe sans accéder au disque.',
+        inDepthFr: 'Path suit la plateforme. PurePosixPath et PureWindowsPath imposent une syntaxe. relative_to exige une base compatible et suffixes conserve .tar.gz.',
+        commonFr: ['name, stem, suffix, suffixes', 'parent et parents', 'parts', 'joindre avec /', 'with_suffix()', 'relative_to()']
+    },
+    'concept:csvJson': {
+        shape: 'json.loads(text); csv.reader(file_like)',
+        overview: 'CSV stores rows and columns. JSON stores nested objects, arrays, strings, numbers, booleans, and null.',
+        simple: 'Use csv.reader for rows, csv.DictReader for named columns, json.loads for text to Python data, and json.dumps for Python data to text.',
+        intermediate: 'CSV values begin as strings and often need conversion. JSON objects become dictionaries and arrays become lists. Serialize deterministically when exact output text matters.',
+        inDepth: 'CSV requires correct delimiter, quoting, and newline handling. JSON keys are strings and NaN is not standard JSON. Validate missing fields and nested types before accessing them.',
+        examples: ['rows = list(csv.reader(StringIO(text)))', 'rows = csv.DictReader(StringIO(text))', 'data = json.loads(text)', 'text = json.dumps(data, sort_keys=True)'],
+        common: ['csv.reader()', 'csv.DictReader()', 'StringIO for text', 'json.loads()', 'json.dumps()', 'convert CSV field types explicitly'],
+        overviewFr: 'CSV stocke des lignes et colonnes. JSON stocke des objets, tableaux, chaînes, nombres, booléens et null imbriqués.',
+        simpleFr: 'Utilisez csv.reader pour les lignes, csv.DictReader pour les colonnes nommées, json.loads du texte vers Python et json.dumps de Python vers le texte.',
+        intermediateFr: 'Les valeurs CSV sont d’abord des chaînes. Les objets JSON deviennent des dictionnaires et les tableaux deviennent des listes.',
+        inDepthFr: 'CSV exige une gestion correcte du séparateur, des guillemets et des nouvelles lignes. Vérifiez les champs absents et les types imbriqués avant l’accès.',
+        commonFr: ['csv.reader()', 'csv.DictReader()', 'StringIO pour du texte', 'json.loads()', 'json.dumps()', 'convertir explicitement les champs CSV']
+    },
+    'concept:algorithmsComplexity': {
+        shape: 'define invariant → process input → prove termination',
+        overview: 'Algorithms are repeatable procedures. Complexity describes how their time or memory grows as the input becomes larger.',
+        simple: 'Linear search checks items in order. Binary search repeatedly halves a sorted search range. Sorting arranges items according to a comparison rule.',
+        intermediate: 'Track an invariant: what is already known to be correct after each step. Handle empty input, duplicates, missing targets, and boundaries explicitly.',
+        inDepth: 'Linear search is O(n), binary search is O(log n) on sorted random-access data, and simple nested-loop sorts are O(n²). Hash sets and dictionaries often provide average O(1) membership.',
+        examples: ['for index, value in enumerate(values):\n    if value == target:\n        return index', 'middle = (low + high) // 2', 'seen = set()\nfor value in values:\n    seen.add(value)'],
+        common: ['correctness before optimization', 'loop invariant', 'O(1), O(log n), O(n), O(n²)', 'linear and binary search', 'stable and in-place sorting', 'test boundaries and duplicates'],
+        overviewFr: 'Un algorithme est une procédure répétable. La complexité décrit la croissance du temps ou de la mémoire lorsque l’entrée grandit.',
+        simpleFr: 'La recherche linéaire vérifie les éléments dans l’ordre. La recherche binaire divise une plage triée en deux. Le tri ordonne les éléments.',
+        intermediateFr: 'Suivez un invariant : ce qui est déjà correct après chaque étape. Gérez explicitement le vide, les doublons, les cibles absentes et les limites.',
+        inDepthFr: 'La recherche linéaire est O(n), la recherche binaire O(log n) sur des données triées et les tris simples à boucles imbriquées O(n²).',
+        commonFr: ['la correction avant l’optimisation', 'invariant de boucle', 'O(1), O(log n), O(n), O(n²)', 'recherche linéaire et binaire', 'tri stable et sur place', 'tester limites et doublons']
+    },
     'concept:while_loops': {
         shape: 'while condition:',
         simple: 'A while loop repeats while a condition stays True.',
@@ -5117,7 +5273,9 @@ const getModeLabel = (mode: ProblemMode, lang: 'en' | 'fr' = 'en') => {
 
 const getExerciseDescription = (exercise: Exercise, lang: 'en' | 'fr') => {
     let description: string;
-    if (lang === 'fr' && CONCEPT_LEVEL_EXPANSION_FR[exercise.id]) {
+    if (lang === 'fr' && CORE_CONCEPT_EXPANSION_FR[exercise.id]) {
+        description = CORE_CONCEPT_EXPANSION_FR[exercise.id].description;
+    } else if (lang === 'fr' && CONCEPT_LEVEL_EXPANSION_FR[exercise.id]) {
         description = CONCEPT_LEVEL_EXPANSION_FR[exercise.id].description;
     } else if (lang === 'fr' && EASY_CONCEPT_PRACTICE_FR[exercise.id]) {
         description = EASY_CONCEPT_PRACTICE_FR[exercise.id].description;
@@ -16652,13 +16810,13 @@ const WorkspaceApp: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v313') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v314') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v313')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v314')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -17227,7 +17385,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
         const q = lookupQuestion.toLowerCase();
         const description = getExerciseDescription(exercise, appLang);
         const generatedLocalization = appLang === 'fr'
-            ? CONCEPT_LEVEL_EXPANSION_FR[exercise.id] ?? EASY_CONCEPT_PRACTICE_FR[exercise.id] ?? WHILE_LOOP_PRACTICE_FR[exercise.id] ?? CONCEPT_EXPANSION_FR[exercise.id] ?? ADVANCED_CONCEPT_FR[exercise.id] ?? FOUNDATION_INTERMEDIATE_FR[exercise.id]
+            ? CORE_CONCEPT_EXPANSION_FR[exercise.id] ?? CONCEPT_LEVEL_EXPANSION_FR[exercise.id] ?? EASY_CONCEPT_PRACTICE_FR[exercise.id] ?? WHILE_LOOP_PRACTICE_FR[exercise.id] ?? CONCEPT_EXPANSION_FR[exercise.id] ?? ADVANCED_CONCEPT_FR[exercise.id] ?? FOUNDATION_INTERMEDIATE_FR[exercise.id]
             : null;
         const localizedExercise = generatedLocalization
             ? { ...exercise, description, hint: generatedLocalization.hint, breakdown: generatedLocalization.breakdown }
@@ -19748,7 +19906,7 @@ builtins.input = lambda prompt='': (_ for _ in ()).throw(Exception("__AUTO_GRADE
                                 : isSlicingPractice ? 'slicing'
                                     : 'for loops';
         const localizedGenerated = lang === 'fr'
-            ? CONCEPT_LEVEL_EXPANSION_FR[targetExercise.id] ?? EASY_CONCEPT_PRACTICE_FR[targetExercise.id] ?? WHILE_LOOP_PRACTICE_FR[targetExercise.id] ?? CONCEPT_EXPANSION_FR[targetExercise.id] ?? ADVANCED_CONCEPT_FR[targetExercise.id] ?? FOUNDATION_INTERMEDIATE_FR[targetExercise.id]
+            ? CORE_CONCEPT_EXPANSION_FR[targetExercise.id] ?? CONCEPT_LEVEL_EXPANSION_FR[targetExercise.id] ?? EASY_CONCEPT_PRACTICE_FR[targetExercise.id] ?? WHILE_LOOP_PRACTICE_FR[targetExercise.id] ?? CONCEPT_EXPANSION_FR[targetExercise.id] ?? ADVANCED_CONCEPT_FR[targetExercise.id] ?? FOUNDATION_INTERMEDIATE_FR[targetExercise.id]
             : null;
         const breakdown = localizedGenerated?.breakdown ?? targetExercise.breakdown ?? '';
         const requiredStructure = isRegexPractice ? "Import and use Python's re module."
@@ -23178,6 +23336,7 @@ const App: React.FC = () => {
                 FOUNDATION_INTERMEDIATE_FR = catalog.foundationIntermediateFr;
                 EASY_CONCEPT_PRACTICE_FR = catalog.easyConceptPracticeFr;
                 CONCEPT_LEVEL_EXPANSION_FR = catalog.conceptLevelExpansionFr;
+                CORE_CONCEPT_EXPANSION_FR = catalog.coreConceptExpansionFr;
                 if (active) setCurriculumReady(true);
             })
             .catch(error => {

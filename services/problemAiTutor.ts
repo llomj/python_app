@@ -430,6 +430,18 @@ const explainSolutionLines = (analysis: SolutionAnalysis, language: ProblemAiLan
   });
 };
 
+const pythonLiteral = (value: unknown): string => {
+  if (value === null || value === undefined) return 'None';
+  if (value === true) return 'True';
+  if (value === false) return 'False';
+  if (typeof value === 'string') return JSON.stringify(value);
+  if (Array.isArray(value)) return `[${value.map(pythonLiteral).join(', ')}]`;
+  if (typeof value === 'object') {
+    return `{${Object.entries(value as Record<string, unknown>).map(([key, item]) => `${pythonLiteral(key)}: ${pythonLiteral(item)}`).join(', ')}}`;
+  }
+  return String(value);
+};
+
 const concreteTests = (exercise: Exercise, grader: AutoGrader | null | undefined, language: ProblemAiLanguage): string[] => {
   const fr = language === 'fr';
   const functionName = grader?.functionNames?.[0];
@@ -439,13 +451,13 @@ const concreteTests = (exercise: Exercise, grader: AutoGrader | null | undefined
     .filter(test => test.expected !== undefined)
     .slice(0, 4);
   return cases.map(test => {
-    const args = test.args.map(value => JSON.stringify(value)).join(', ');
+    const args = test.args.map(pythonLiteral).join(', ');
     const call = functionName && (declaredParameters === undefined || test.args.length <= declaredParameters)
       ? `${functionName}(${args})`
       : test.args.length
         ? `${fr ? 'valeur(s) d’entrée' : 'input value(s)'}: ${args}`
         : (functionName ? `${functionName}()` : (fr ? 'entrée du script' : 'script input'));
-    return `\`${call}\` → \`${JSON.stringify(test.expected)}\``;
+    return `\`${call}\` → \`${pythonLiteral(test.expected)}\``;
   });
 };
 

@@ -5,6 +5,7 @@ import { ADVANCED_CONCEPT_GRADERS } from './advancedConceptGraders';
 import { FOUNDATION_INTERMEDIATE_GRADERS } from './foundationIntermediateGraders';
 import { EASY_CONCEPT_PRACTICE_GRADERS } from './easyConceptPracticeGraders';
 import { CONCEPT_LEVEL_EXPANSION_GRADERS } from './conceptLevelExpansionGraders';
+import { CORE_CONCEPT_EXPANSION_GRADERS } from './coreConceptExpansionGraders';
 
 export type CompareMode = 'exact' | 'float' | 'printedOrReturn' | 'printedFlex' | 'valuesPresent' | 'structuralMatch' | 'lenient' | 'sourceOnly' | 'sourceIntent' | 'numberRange' | 'setPop' | 'length' | 'typeName' | 'unorderedList' | 'unorderedWords' | 'numberList' | 'dictUnorderedLists' | 'dictAddedPair' | 'letterCounts' | 'vowelConsonantCounts';
 
@@ -89,6 +90,7 @@ export const AUTO_GRADERS: Record<number, AutoGrader> = {
   ...FOUNDATION_INTERMEDIATE_GRADERS,
   ...EASY_CONCEPT_PRACTICE_GRADERS,
   ...CONCEPT_LEVEL_EXPANSION_GRADERS,
+  ...CORE_CONCEPT_EXPANSION_GRADERS,
     1: {
         functionNames: ['add_numbers', 'add_number', 'add_num'],
         tests: [

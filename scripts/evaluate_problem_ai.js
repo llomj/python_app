@@ -129,10 +129,16 @@ try {
   const answer1287 = buildProblemAiTutorAnswer({ exercise: exercise1287, description: exercise1287.description, grader: AUTO_GRADERS[1287], language: 'en' });
   for (const fragment of [
     '`text.isalpha()`', '`text.isdigit()`', 'must be a string (`str`)', 'Combine the two Booleans with `or`',
-    '`or` short-circuits', '`text.isalnum()` is not equivalent', '`input value(s): "abc"` → `true`',
-    '`input value(s): "abc123"` → `false`',
+    '`or` short-circuits', '`text.isalnum()` is not equivalent', '`input value(s): "abc"` → `True`',
+    '`input value(s): "abc123"` → `False`',
   ]) {
     if (!answer1287.includes(fragment)) failures.push(`Problem 1287 method regression: missing ${JSON.stringify(fragment)}`);
+  }
+
+  const exercise6608 = EXERCISES.find(exercise => exercise.id === 6608);
+  const answer6608 = buildProblemAiTutorAnswer({ exercise: exercise6608, description: exercise6608.description, grader: AUTO_GRADERS[6608], language: 'en' });
+  for (const fragment of ['`default_if_none_1(None)` → `1`', '`default_if_none_1(0)` → `0`', '`Is`']) {
+    if (!answer6608.includes(fragment)) failures.push(`Problem 6608 None/truthiness regression: missing ${JSON.stringify(fragment)}`);
   }
 
   const exercise191 = EXERCISES.find(exercise => exercise.id === 191);
@@ -163,6 +169,7 @@ try {
   console.log(`New French explanations: ${foundationFrench}`);
   console.log('Problem 898 lambda/unpacking regression: checked');
   console.log('Problem 1287 string-method/Boolean regression: checked');
+  console.log('Problem 6608 Python-literal/None regression: checked');
 
   if (failures.length) {
     console.error(`\nFailures (${failures.length}):`);
