@@ -8,6 +8,13 @@ const app = fs.readFileSync(path.join(root, 'App.tsx'), 'utf8');
 const translations = fs.readFileSync(path.join(root, 'services/translations.ts'), 'utf8');
 const failures = [];
 
+const difficultyModesMatch = app.match(/const DIFFICULTY_MODES:[\s\S]*?= \[([\s\S]*?)\n\];/);
+const difficultyModeOrder = [...(difficultyModesMatch?.[1] || '').matchAll(/id: '([^']+)'/g)].map(match => match[1]);
+const expectedDifficultyModeOrder = ['atomic_beginner', 'beginner', 'normal', 'intermediate', 'expert', 'legend'];
+if (JSON.stringify(difficultyModeOrder) !== JSON.stringify(expectedDifficultyModeOrder)) {
+  failures.push(`problem mode order must be ${expectedDifficultyModeOrder.join(', ')}`);
+}
+
 const requiredAppMarkers = [
   "const [randomLevelPickerOpen, setRandomLevelPickerOpen]",
   "const [randomLevelPracticeEnabled, setRandomLevelPracticeEnabled]",
@@ -50,6 +57,7 @@ for (const marker of orderedMarkers) {
 
 console.log('Random-by-level mode audit');
 console.log('Four-card order: Play, Random by Level, Code Scaffold, Plain IDE');
+console.log('Problem mode order: Beginner, Easy, Normal, Intermediate, Expert, Legend');
 console.log('Difficulty pools: Easy, Intermediate, Expert');
 console.log('English/French explanation: checked');
 console.log('Persistent Next randomization: checked');

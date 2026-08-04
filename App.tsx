@@ -4433,9 +4433,9 @@ const loadPanelColorSettings = (): PanelColorSettings => {
 };
 
 const DIFFICULTY_MODES: Array<{ id: DifficultyMode; label: string; description: string }> = [
-    { id: 'normal', label: 'Normal', description: 'All problems mixed' },
     { id: 'atomic_beginner', label: 'Beginner', description: 'First steps: print, variables, tiny values' },
     { id: 'beginner', label: 'Easy', description: 'Simple functions, strings, lists' },
+    { id: 'normal', label: 'Normal', description: 'All problems mixed' },
     { id: 'intermediate', label: 'Intermediate', description: 'Loops, dictionaries, patterns' },
     { id: 'expert', label: 'Expert', description: 'Nested data, constraints, algorithms' },
     { id: 'legend', label: 'Legend', description: 'Recursion, OOP, files, advanced modules' }
@@ -16813,13 +16813,13 @@ const WorkspaceApp: React.FC = () => {
     useEffect(() => {
         if (!navigator.serviceWorker) return;
         const handleOfflineMessage = (event: MessageEvent) => {
-            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v315') {
+            if ((event.data?.type === 'OFFLINE_READY' || event.data?.type === 'APP_UPDATED') && event.data?.version === 'v316') {
                 setOfflinePackageReady(true);
             }
         };
         navigator.serviceWorker.addEventListener('message', handleOfflineMessage);
         navigator.serviceWorker.ready.then(registration => {
-            if (registration.active?.scriptURL.includes('v=v315')) setOfflinePackageReady(true);
+            if (registration.active?.scriptURL.includes('v=v316')) setOfflinePackageReady(true);
         }).catch(() => undefined);
         return () => navigator.serviceWorker.removeEventListener('message', handleOfflineMessage);
     }, []);
@@ -23078,9 +23078,9 @@ print(result)
                                         <p className="font-bold text-white text-xs">Problem Mode</p>
                                         <p>Choose a <strong>difficulty mode</strong> to filter problems by how hard they are:</p>
                                         <ul className="list-disc pl-4 space-y-1 text-gray-400">
-                                            <li><strong>Normal</strong> — mixes all problems together</li>
                                             <li><strong>Beginner</strong> — atomic first steps: print, variables, values</li>
                                             <li><strong>Easy</strong> — simple functions, strings, and lists</li>
+                                            <li><strong>Normal</strong> — mixes all problems together</li>
                                             <li><strong>Intermediate</strong> — loops, dictionaries, and patterns</li>
                                             <li><strong>Expert</strong> — harder challenges</li>
                                             <li><strong>Legend</strong> — toughest problems</li>
