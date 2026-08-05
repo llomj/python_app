@@ -37,14 +37,8 @@ def commit_terminal():
     print(f"Copying terminal-helper to {TERMINAL_REPO_LOCAL}...")
     for item in terminal_helper.iterdir():
         dest = TERMINAL_REPO_LOCAL / item.name
-        if dest.exists():
-            if dest.is_dir():
-                shutil.rmtree(dest)
-            else:
-                dest.unlink()
-
         if item.is_dir():
-            shutil.copytree(item, dest)
+            shutil.copytree(item, dest, dirs_exist_ok=True)
         else:
             shutil.copy2(item, dest)
         print(f"  Copied: {item.name}")
