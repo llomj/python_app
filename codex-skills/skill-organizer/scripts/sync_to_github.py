@@ -6,7 +6,6 @@ from __future__ import annotations
 import argparse
 import filecmp
 import fcntl
-import os
 import re
 import shutil
 import subprocess
@@ -17,7 +16,7 @@ from pathlib import Path
 
 
 SOURCE = Path("/Users/moll/.codex/skills")
-REPO = Path("/Users/moll/Desktop/python_app")
+REPO = Path("/Users/moll/.codex/github-sync/python_app")
 DESTINATION = REPO / "codex-skills"
 EXPECTED_REMOTE = "https://github.com/llomj/python_app.git"
 LOCK_FILE = Path("/tmp/com.user.skill-sync.lock")
@@ -101,6 +100,26 @@ def replace_mirror(snapshot: Path) -> None:
 
 def verify_repository() -> None:
     if not (REPO / ".git").is_dir():
+        REPO.parent.mkdir(parents=True, exist_ok=True)
+        cloned = subprocess.run(
+            [
+                "/usr/bin/git",
+                "clone",
+                "--depth",
+                "1",
+                "--branch",
+                "main",
+                "--single-branch",
+                EXPECTED_REMOTE,
+                str(REPO),
+            ],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        if cloned.returncode:
+            raise RuntimeError(f"Could not create automation checkout: {cloned.stderr.strip()}")
+    if not (REPO / ".git").is_dir():
         raise RuntimeError(f"Git repository not found: {REPO}")
     remote = run_git("remote", "get-url", "origin").stdout.strip()
     if remote.removesuffix(".git") != EXPECTED_REMOTE.removesuffix(".git"):
@@ -116,8 +135,10 @@ def fetch_and_check_divergence() -> int:
         raise RuntimeError(f"Could not fetch origin: {fetched.stderr.strip()}")
     counts = run_git("rev-list", "--left-right", "--count", "HEAD...origin/main").stdout.split()
     ahead, behind = (int(value) for value in counts)
+    if ahead and behind:
+        raise RuntimeError("automation checkout and origin/main have diverged")
     if behind:
-        raise RuntimeError("origin/main is ahead; update the local repository before automatic sync")
+        run_git("merge", "--ff-only", "origin/main")
     if ahead:
         subjects = run_git("log", "--format=%s", "origin/main..HEAD").stdout.splitlines()
         if any(not subject.startswith("chore(skills): automated sync") for subject in subjects):
@@ -166,6 +187,9 @@ def main() -> int:
         if findings:
             raise RuntimeError("Potential secrets found; sync stopped:\n" + "\n".join(findings))
 
+        if not args.dry_run:
+            fetch_and_check_divergence()
+
         with tempfile.TemporaryDirectory(prefix="codex-skill-sync-") as temp:
             snapshot = Path(temp)
             build_snapshot(skills, snapshot)
@@ -174,7 +198,6 @@ def main() -> int:
                 print(f"Skills found: {len(skills)}")
                 print("Mirror status: current" if current else "Mirror status: update needed")
                 return 0 if current else 1
-            fetch_and_check_divergence()
             if not current:
                 replace_mirror(snapshot)
             result = commit_and_push(not args.no_push)

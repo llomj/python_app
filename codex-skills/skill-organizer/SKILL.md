@@ -16,14 +16,19 @@ Manage skills across Codex, OpenCode, Cursor, and Antigravity.
 Codex runtime source:
 `/Users/moll/.codex/skills/`
 
-GitHub mirror:
+GitHub automation checkout:
+`/Users/moll/.codex/github-sync/python_app/codex-skills/`
+
+Desktop working checkout:
 `/Users/moll/Desktop/python_app/codex-skills/`
 
 Repository:
 `https://github.com/llomj/python_app.git`
 
-The GitHub folder is an exact backup of user-authored Codex skills. Exclude
-Codex-managed `.system/` content and the recursive `user-codex-skills` symlink.
+The repository's GitHub folder is an exact backup of user-authored Codex skills.
+The background job uses its private checkout because macOS blocks LaunchAgents
+from Desktop. Exclude Codex-managed `.system/` content and the recursive
+`user-codex-skills` symlink.
 
 Cross-tool base path:
 `/Users/moll/Library/Mobile Documents/iCloud~md~obsidian/Documents/AI brain/AI skills/`
