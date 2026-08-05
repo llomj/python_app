@@ -25,7 +25,7 @@ Desktop working checkout:
 Repository:
 `https://github.com/llomj/python_app.git`
 
-The repository's GitHub folder is an exact backup of user-authored Codex skills.
+The repository's GitHub folder is a non-destructive backup of user-authored Codex skills.
 The background job uses its private checkout because macOS blocks LaunchAgents
 from Desktop. Exclude Codex-managed `.system/` content and the recursive
 `user-codex-skills` symlink.
@@ -72,9 +72,11 @@ does not delete extra runtime skills.
 ## GitHub
 
 The `com.user.skill-sync` LaunchAgent watches `~/.codex/skills` and also runs every
-five minutes. It uses `scripts/sync_to_github.py` to copy meaningful skill files,
-scan for common secret formats, verify `origin/main`, commit only `codex-skills/`,
-and push. It stops rather than pushing unrelated commits or branch divergence.
+five minutes. It uses `scripts/sync_to_github.py` to add or update meaningful
+skill files, scan for common secret formats, verify `origin/main`, commit only
+`codex-skills/`, and push. It never deletes older GitHub content when a local
+source disappears. It stops rather than pushing unrelated commits or branch
+divergence.
 
 ## Cross-Tool Compatibility
 

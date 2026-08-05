@@ -14,7 +14,8 @@ Use when Obsidian/Codex path drift, duplicate iCloud roots, or Mac/iPhone sync m
 
 1. Mac Obsidian path remains pinned to canonical vault.
 2. Mac and iPhone read the same Obsidian provider container; lower phone counts usually mean iCloud/Obsidian mobile indexing lag unless a second real vault root is found.
-3. Duplicate roots are detected and quarantined/archived.
+3. Duplicate roots are detected and reported. Quarantine/archive requires the
+   protected-content confirmation sequence and never permanently deletes data.
 4. Every run is logged to:
    - `track.md` and/or `log.md`
 
@@ -34,8 +35,14 @@ Use when Obsidian/Codex path drift, duplicate iCloud roots, or Mac/iPhone sync m
 ## Safety Rules
 
 - Use single-process lock (no concurrent rsync loops).
-- Archive before delete.
-- No destructive cleanup unless explicitly approved.
+- Never permanently delete iCloud Drive content.
+- Never use destructive synchronization such as `rsync --delete` against iCloud.
+- Initial deletion or archive request: do not execute; show
+  `🛑 ⚠️ DELETION WARNING` with exact paths and request confirmation.
+- First confirmation: still do not execute; show
+  `🛑 ⚠️ SECOND DELETION WARNING` and require a second confirmation.
+- After second confirmation, only an in-iCloud archive is allowed. Jono must
+  perform any permanent deletion manually.
 
 ## Post-Run
 

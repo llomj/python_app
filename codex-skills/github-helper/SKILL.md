@@ -37,6 +37,20 @@ Can open specific repos: https://github.com/llomj/[repo]
 
 llomj
 
+## Protected Content: No Deletion
+
+- Never delete Jono's GitHub repositories or folders within them.
+- Never run or approve `git rm`, destructive `git clean`, folder-removing sync,
+  force-push deletion, or GitHub repository/content deletion APIs.
+- A missing local folder is not authorization to remove its GitHub copy.
+- On an initial deletion request, do not execute. Show
+  `🛑 ⚠️ DELETION WARNING`, identify every exact repository/path, explain the
+  impact, and ask for explicit confirmation.
+- After first confirmation, still do not execute. Show
+  `🛑 ⚠️ SECOND DELETION WARNING` and require a second explicit confirmation.
+- Even after second confirmation, preserve the GitHub content and offer an
+  in-repository archive or backup. Jono must perform permanent deletion manually.
+
 ## Application Repository Clone Policy
 
 Canonical application clone root:

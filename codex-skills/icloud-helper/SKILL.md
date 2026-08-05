@@ -72,7 +72,16 @@ create a second casing variant.
 - ALWAYS confirm before moving folders to iCloud
 - Explain what will happen before execution
 - Provide rollback option (move back to local)
-- NEVER delete - only MOVE or COPY
+- NEVER permanently delete any iCloud Drive file or folder.
+- Never use `rm`, `rmdir`, `unlink`, `rsync --delete`, destructive cleanup, or
+  any operation that propagates deletion through iCloud.
+- On an initial deletion request, do not execute. Show
+  `🛑 ⚠️ DELETION WARNING`, exact paths, impact, and recovery risk, then request
+  explicit confirmation.
+- After first confirmation, still do not execute. Show
+  `🛑 ⚠️ SECOND DELETION WARNING` and require a second explicit confirmation.
+- Even after second confirmation, offer only an in-iCloud archive or backup.
+  Jono must perform permanent deletion manually.
 
 ## Integration
 

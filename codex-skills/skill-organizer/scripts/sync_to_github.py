@@ -76,7 +76,8 @@ def same_tree(left: Path, right: Path) -> bool:
     if not left.is_dir() or not right.is_dir():
         return False
     comparison = filecmp.dircmp(left, right, ignore=list(IGNORED_NAMES))
-    if comparison.left_only or comparison.right_only or comparison.diff_files or comparison.funny_files:
+    # Extra backup files are intentionally retained; source removals never delete GitHub content.
+    if comparison.left_only or comparison.diff_files or comparison.funny_files:
         return False
     return all(same_tree(left / name, right / name) for name in comparison.common_dirs)
 
@@ -89,7 +90,7 @@ def build_snapshot(skills: list[Path], root: Path) -> None:
 def replace_mirror(snapshot: Path) -> None:
     DESTINATION.mkdir(parents=True, exist_ok=True)
     result = subprocess.run(
-        ["/usr/bin/rsync", "-a", "--delete", f"{snapshot}/", f"{DESTINATION}/"],
+        ["/usr/bin/rsync", "-a", f"{snapshot}/", f"{DESTINATION}/"],
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
