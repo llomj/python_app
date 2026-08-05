@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitHub Helper"
+  short_description: "Open and manage GitHub repositories"
+  default_prompt: "Open github.com"

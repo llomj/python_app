@@ -1,0 +1,4 @@
+interface:
+  display_name: "Automate Thread Names"
+  short_description: "Create and apply concise thread titles"
+  default_prompt: "Simplify and standardize thread names so they are concise, unique, and easy for non-technical readers to understand. When the user accepts a title, apply the rename if runtime capability exists; otherwise return the exact accepted title with a clear capability fallback."

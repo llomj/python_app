@@ -1,0 +1,4 @@
+interface:
+  display_name: "Moll Helper"
+  short_description: "Organize and clean home folder"
+  default_prompt: "Analyze my home folder"

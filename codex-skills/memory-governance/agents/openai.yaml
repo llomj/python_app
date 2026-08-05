@@ -1,0 +1,4 @@
+interface:
+  display_name: "Memory Governance"
+  short_description: "Track skill updates, commits, and pushes"
+  default_prompt: "Track memory and skill lifecycle states, enforce guardrails, and keep publish status current in the canonical Skills repository."

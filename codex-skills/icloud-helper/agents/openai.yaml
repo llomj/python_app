@@ -1,0 +1,4 @@
+interface:
+  display_name: "iCloud Helper"
+  short_description: "Manage iCloud sync and folder backup"
+  default_prompt: "Sync my folder to iCloud"
