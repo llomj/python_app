@@ -38,8 +38,18 @@ Use `chflags icloudstorage` to add to iCloud
 
 User may request these folders:
 - ~/Library/Mobile Documents/com~apple~CloudDocs/AI/ → iCloud (AI projects and tasks)
+- ~/Library/Mobile Documents/com~apple~CloudDocs/AI/AI apps/ → canonical working clones for application repositories
 - ~/Documents/ → iCloud (personal docs)
 - Custom folders as requested
+
+## GitHub Application Clones
+
+New application repositories belong directly under:
+`/Users/moll/Library/Mobile Documents/com~apple~CloudDocs/AI/AI apps/`
+
+Use `github-helper` for clone checks and GitHub operations. The existing folder
+is spelled `AI apps` with uppercase `AI` and lowercase `apps`; do not silently
+create a second casing variant.
 
 ## Commands
 

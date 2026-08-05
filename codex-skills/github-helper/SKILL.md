@@ -36,6 +36,36 @@ Can open specific repos: https://github.com/llomj/[repo]
 ## GitHub Username
 
 llomj
+
+## Application Repository Clone Policy
+
+Canonical application clone root:
+`/Users/moll/Library/Mobile Documents/com~apple~CloudDocs/AI/AI apps/`
+
+Finder location:
+`iCloud Drive/AI/AI apps/`
+
+- Clone every new application repository directly to
+  `AI apps/<repository-name>/` unless Jono explicitly chooses another location.
+- Before cloning, verify the canonical root exists and search for an existing
+  clone of the same GitHub remote to avoid duplicate working copies.
+- Do not use Desktop, Documents, or the home folder as the default location for
+  application repositories.
+- The repository directory in `AI apps/` is the normal working clone; commits
+  and pushes continue to use its GitHub `origin` remote.
+- Infrastructure mirrors may use dedicated hidden locations. For example, the
+  automated Codex-skill publisher uses `~/.codex/github-sync/` and is not an app
+  development checkout.
+- The existing folder is spelled `AI apps` with uppercase `AI` and lowercase
+  `apps`. Do not perform a case-only rename without checking dependent paths.
+
+Example:
+
+```bash
+git clone https://github.com/llomj/example-app.git \
+  "/Users/moll/Library/Mobile Documents/com~apple~CloudDocs/AI/AI apps/example-app"
+```
+
 ## Obsidian Vault Sync Policy
 
 - For AI brain vault operations, repository is `https://github.com/llomj/Obsidian.git`.
