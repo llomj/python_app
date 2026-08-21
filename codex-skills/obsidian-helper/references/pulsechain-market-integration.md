@@ -40,4 +40,6 @@ Stable automated entry points are `wiki/sources/pulsechain-market-daily.md` and 
 
 The user-designated visible overview is `raw/Pulsechain /pulsechain-overview.md`. This is an explicit exception to the normal raw-folder synthesis rule. Generated PulseChain CSV and JSON data belongs only in `raw/files/pulsechain/` and uses stable `*-latest` filenames. Never scatter PulseChain data exports elsewhere in the vault.
 
+HEX Daily Stats is a canonical two-chain cross-check in this folder. Maintain `hex-daily-stats-latest.csv` and `hex-daily-stats-latest.json` with explicit `HEX (PulseChain)` and `HEX on Ethereum` labels, source URLs, collection time, and the source record date. Treat its price fields as secondary cross-checks; use refreshed DEX market data for the live dashboard price.
+
 Keep machine snapshots in the PulseChain skill. Store concise conclusions and source links in Obsidian rather than duplicating complete JSON snapshots.
