@@ -9,6 +9,8 @@
 
 Use the market skill for live collection and quantitative analysis. Use Obsidian Helper to find prior research, synthesize multiple dated observations, and publish human-readable knowledge notes.
 
+When the user says `dashboard`, route to the market skill's emoji dashboard. It includes live indexed markets, ratios, confidence, DEX liquidity, broad-crypto Fear & Greed, alerts, and sanitized upcoming stake endings.
+
 ## Routing rules
 
 - Treat unqualified `HEX` as HEX on PulseChain.
@@ -17,6 +19,8 @@ Use the market skill for live collection and quantitative analysis. Use Obsidian
 - Preserve the UTC observation time, source health, and coverage limitations.
 - Never present a stored Obsidian note as live market data.
 - Never store wallet addresses, seed phrases, private keys, authentication secrets, or browser-local wallet data in the vault.
+- For Richard Heart questions, start with `wiki/hubs/richard-heart-hub.md`, `wiki/entities/richard-heart.md`, `wiki/sources/richard-heart-source-index.md`, the timeline, claim registry, theses, positions, worldview, and track record. Verify current tweets and time-sensitive claims against current primary sources.
+- Separate Richard Heart's stated view, Obsidian synthesis, current factual verification, and unresolved disputes.
 
 ## Vault publication
 
@@ -29,5 +33,7 @@ Write only when the user explicitly asks to save, remember, publish, or update r
 - Update `index.md` and append the action to `log.md`.
 - Cite the skill snapshot path and external market sources used.
 - Never modify `raw/`.
+
+Stable automated entry points are `wiki/sources/pulsechain-market-daily.md` and `wiki/sources/pulsechain-market-weekly.md`. Update those canonical files instead of creating dated duplicates.
 
 Keep machine snapshots in the PulseChain skill. Store concise conclusions and source links in Obsidian rather than duplicating complete JSON snapshots.
