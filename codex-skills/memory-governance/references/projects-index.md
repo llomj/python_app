@@ -8,4 +8,5 @@
 | icloud-helper | /Users/moll/.codex/skills/icloud-helper | codex-skills/icloud-helper | https://github.com/llomj/python_app.git | unchanged | committed | pushed | 329e5d2 | 2026-08-05 |
 | icloud-path-governance | /Users/moll/.codex/skills/icloud-path-governance | codex-skills/icloud-path-governance | https://github.com/llomj/python_app.git | unchanged | committed | pushed | 329e5d2 | 2026-08-05 |
 | analyze-pulsechain-markets | /Users/moll/.codex/skills/analyze-pulsechain-markets | codex-skills/analyze-pulsechain-markets | https://github.com/llomj/python_app.git | modified | not_committed | not_pushed | none | never |
+| obsidian-helper | /Users/moll/.codex/skills/obsidian-helper | codex-skills/obsidian-helper | https://github.com/llomj/python_app.git | modified | not_committed | not_pushed | unknown | unknown |
 | skill-organizer | /Users/moll/.codex/skills/skill-organizer | codex-skills/skill-organizer | https://github.com/llomj/python_app.git | unchanged | committed | pushed | 329e5d2 | 2026-08-05 |

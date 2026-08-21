@@ -6,6 +6,7 @@ description: |
   Use when user wants to ingest new content into the wiki following the LLM Wiki pattern.
   Use when user wants to check for contradictions, orphan pages, or lint the vault.
   Use when user wants to synthesize information across multiple sources.
+  Use when user wants to save, retrieve, or synthesize PulseChain market research produced by the PulseChain Market Analyst skill.
   Use when user wants to search the 950+ transcripts in the raw/ folder.
   CRITICAL: Never modify raw/ folder - it's immutable source documents.
   CRITICAL: Always use wiki/ for synthesized content, not raw/ files.
@@ -421,6 +422,11 @@ The more you use it, the smarter it becomes!
 - Use [[wiki/page]] links for cross-references
 - Follow frontmatter format strictly
 - Update index.md and log.md on every ingest
+
+## PulseChain Market Analyst Integration
+
+Read [references/pulsechain-market-integration.md](references/pulsechain-market-integration.md) for PulseChain, HEX, PLS, PLSX, INC, HDRN, ICSA, or PRVX research. Route live price, liquidity, volume, DEX, and pool analysis through `$analyze-pulsechain-markets`. Write a vault note only when the user explicitly asks to save or publish the analysis.
+
 ## Obsidian Repo Sync Policy
 
 - Canonical AI brain remote: `https://github.com/llomj/Obsidian.git`.
