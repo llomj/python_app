@@ -427,6 +427,8 @@ The more you use it, the smarter it becomes!
 
 Read [references/pulsechain-market-integration.md](references/pulsechain-market-integration.md) for PulseChain, HEX, PLS, PLSX, INC, HDRN, ICSA, or PRVX research. Route live price, liquidity, volume, DEX, and pool analysis through `$analyze-pulsechain-markets`. Write a vault note only when the user explicitly asks to save or publish the analysis.
 
+For this user-designated branch only, route generated CSV/JSON data to `raw/files/pulsechain/` and maintain the readable dashboard dialogue at `raw/Pulsechain /pulsechain-overview.md`. Preserve the existing trailing space in `raw/Pulsechain ` and never create a duplicate folder. This explicit PulseChain exception does not permit modification of unrelated raw source documents.
+
 ## Obsidian Repo Sync Policy
 
 - Canonical AI brain remote: `https://github.com/llomj/Obsidian.git`.

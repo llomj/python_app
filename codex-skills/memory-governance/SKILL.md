@@ -18,6 +18,8 @@ For every skill, track:
 
 ## Workflow
 
+Read [references/user-display-preferences.md](references/user-display-preferences.md) when a request establishes a display rule intended for all Codex skills.
+
 1. Detect skill changes.
 2. Update tracking row in [references/projects-index.md](references/projects-index.md).
 3. If modified, set `update_state=modified` and `push_state=not_pushed`.

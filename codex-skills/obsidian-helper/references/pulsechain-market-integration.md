@@ -6,6 +6,8 @@
 - Invocation: `$analyze-pulsechain-markets`
 - Codex path: `/Users/moll/.codex/skills/analyze-pulsechain-markets`
 - Canonical iCloud path: `/Users/moll/Library/Mobile Documents/com~apple~CloudDocs/AI/Pulsechain/analyze-pulsechain-markets`
+- Canonical Obsidian data folder: `/Users/moll/Library/Mobile Documents/iCloud~md~obsidian/Documents/AI brain/raw/files/pulsechain`
+- Canonical visible overview folder: `/Users/moll/Library/Mobile Documents/iCloud~md~obsidian/Documents/AI brain/raw/Pulsechain ` (the existing filesystem name includes a trailing space; preserve it and never create a duplicate without the space)
 
 Use the market skill for live collection and quantitative analysis. Use Obsidian Helper to find prior research, synthesize multiple dated observations, and publish human-readable knowledge notes.
 
@@ -35,5 +37,7 @@ Write only when the user explicitly asks to save, remember, publish, or update r
 - Never modify `raw/`.
 
 Stable automated entry points are `wiki/sources/pulsechain-market-daily.md` and `wiki/sources/pulsechain-market-weekly.md`. Update those canonical files instead of creating dated duplicates.
+
+The user-designated visible overview is `raw/Pulsechain /pulsechain-overview.md`. This is an explicit exception to the normal raw-folder synthesis rule. Generated PulseChain CSV and JSON data belongs only in `raw/files/pulsechain/` and uses stable `*-latest` filenames. Never scatter PulseChain data exports elsewhere in the vault.
 
 Keep machine snapshots in the PulseChain skill. Store concise conclusions and source links in Obsidian rather than duplicating complete JSON snapshots.
